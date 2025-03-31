@@ -59,8 +59,8 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         </button>
       </div>
 
-      {/* Voice Assistant Container */}
-      <div className="flex-1 p-4 overflow-hidden">
+      {/* Voice Assistant Container - centered content */}
+      <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
         {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
       </div>
 
