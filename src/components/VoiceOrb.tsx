@@ -32,30 +32,45 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
     >
       <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       
-      {/* Custom K icon with futuristic styling */}
-      <div className="relative w-6 h-6 flex items-center justify-center text-white font-bold">
-        <span className="absolute w-full h-full flex items-center justify-center transform -rotate-3">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path 
-              d="M7 4V20M7 12L17 20M7 12L17 4" 
-              stroke="white" 
-              strokeWidth="2.5" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
-        <span className="absolute w-full h-full flex items-center justify-center text-blue-200 opacity-70 blur-[1px]">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path 
-              d="M7 4V20M7 12L17 20M7 12L17 4" 
-              stroke="currentColor" 
-              strokeWidth="2.5" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
+      {/* Robotic K icon with diffusion effect */}
+      <div className="relative w-6 h-6 flex items-center justify-center">
+        {/* Main K shape */}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute">
+          <path 
+            d="M8 4V20M8 13L16 20M8 11L16 4" 
+            stroke="white" 
+            strokeWidth="2.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          />
+          {/* Circuit lines */}
+          <path 
+            d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" 
+            stroke="white" 
+            strokeWidth="1" 
+            strokeLinecap="round" 
+            strokeOpacity="0.6"
+          />
+          {/* Connection dots */}
+          <circle cx="8" cy="8" r="1" fill="white" fillOpacity="0.8" />
+          <circle cx="8" cy="16" r="1" fill="white" fillOpacity="0.8" />
+          <circle cx="16" cy="8" r="1" fill="white" fillOpacity="0.8" />
+          <circle cx="16" cy="16" r="1" fill="white" fillOpacity="0.8" />
+        </svg>
+        
+        {/* Glow effects */}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute blur-[2px]">
+          <path 
+            d="M8 4V20M8 13L16 20M8 11L16 4" 
+            stroke="#90cdf4" 
+            strokeWidth="3" 
+            strokeLinecap="round" 
+            strokeOpacity="0.5"
+          />
+        </svg>
+        
+        {/* Diffused background glow */}
+        <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl"></div>
       </div>
       
       <div 
