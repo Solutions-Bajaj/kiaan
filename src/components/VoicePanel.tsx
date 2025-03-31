@@ -1,6 +1,6 @@
 
-import React, { useRef } from 'react';
-import { X } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { X, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SolutionsBajajAI from './SolutionsBajajAI';
 
@@ -11,6 +11,7 @@ interface VoicePanelProps {
 
 const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   // Handle click outside to close
   React.useEffect(() => {
@@ -24,14 +25,20 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
 
+  const toggleFullscreen = () => {
+    setIsFullscreen(prev => !prev);
+  };
+
   return (
     <div
       ref={panelRef}
       className={cn(
-        "fixed bottom-8 right-8 z-40 flex flex-col rounded-2xl shadow-xl transition-all duration-500 ease-in-out",
-        "bg-white/90 backdrop-blur-md border border-slate-200 w-[380px] h-[600px] max-h-[80vh]",
-        "overflow-hidden",
-        isOpen ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
+        "fixed z-40 flex flex-col rounded-2xl shadow-xl transition-all duration-500 ease-in-out",
+        "bg-white/90 backdrop-blur-md border border-slate-200 overflow-hidden",
+        isFullscreen 
+          ? "w-[80vw] h-[80vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+          : "w-[380px] h-[600px] max-h-[80vh] bottom-8 right-8",
+        isOpen ? "opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
       )}
     >
       {/* Futuristic background elements */}
@@ -50,13 +57,26 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
           <h2 className="text-lg font-medium text-slate-700">Kiaan</h2>
         </div>
-        <button 
-          onClick={onClose} 
-          className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-          aria-label="Close Kiaan Voice Assistant"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        <div className="flex items-center">
+          <button 
+            onClick={toggleFullscreen} 
+            className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors mr-2"
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="h-5 w-5" />
+            ) : (
+              <Maximize2 className="h-5 w-5" />
+            )}
+          </button>
+          <button 
+            onClick={onClose} 
+            className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Close Kiaan Voice Assistant"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {/* Voice Assistant Container - centered content */}

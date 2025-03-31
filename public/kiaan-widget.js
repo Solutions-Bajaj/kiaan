@@ -31,12 +31,28 @@
         <div class="kiaan-status-dot"></div>
         <h2>Kiaan</h2>
       </div>
-      <button class="kiaan-close-btn" aria-label="Close Kiaan Voice Assistant">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
-          <path d="M18 6 6 18"></path>
-          <path d="m6 6 12 12"></path>
-        </svg>
-      </button>
+      <div class="flex items-center">
+        <button class="kiaan-fullscreen-btn" aria-label="Toggle fullscreen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="maximize-icon">
+            <path d="m15 3 6 6m0-6-6 6"></path>
+            <path d="M9 21 3 15m0 6 6-6"></path>
+            <path d="M21 3h-6m6 0v6"></path>
+            <path d="M3 21h6m-6 0v-6"></path>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="minimize-icon" style="display: none;">
+            <path d="m4 14 6-6m0 0-6 6"></path>
+            <path d="m20 10-6 6m0 0 6-6"></path>
+            <path d="M14 4h6v6"></path>
+            <path d="M10 20H4v-6"></path>
+          </svg>
+        </button>
+        <button class="kiaan-close-btn" aria-label="Close Kiaan Voice Assistant">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="kiaan-panel-content" id="kiaan-ai-content">
       <!-- AI content will be added here -->
@@ -49,9 +65,9 @@
   `;
   container.appendChild(panel);
 
-  // Create and add the AI widget
+  // Load AI script and create widget
   const createAIWidget = () => {
-    // Load the script if not already loaded
+    // Load the script
     if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
       const script = document.createElement('script');
       script.src = 'https://elevenlabs.io/convai-widget/index.js';
@@ -316,6 +332,7 @@
     
     // Toggle panel visibility
     let isOpen = false;
+    let isFullscreen = false;
     
     orb.addEventListener('click', () => {
       isOpen = true;
@@ -330,6 +347,26 @@
         isOpen = false;
         panel.classList.remove('open');
         orb.classList.remove('hidden');
+      });
+    }
+    
+    const fullscreenBtn = panel.querySelector('.kiaan-fullscreen-btn');
+    if (fullscreenBtn) {
+      const maximizeIcon = fullscreenBtn.querySelector('.maximize-icon');
+      const minimizeIcon = fullscreenBtn.querySelector('.minimize-icon');
+      
+      fullscreenBtn.addEventListener('click', () => {
+        isFullscreen = !isFullscreen;
+        
+        if (isFullscreen) {
+          panel.classList.add('fullscreen');
+          maximizeIcon.style.display = 'none';
+          minimizeIcon.style.display = 'block';
+        } else {
+          panel.classList.remove('fullscreen');
+          maximizeIcon.style.display = 'block';
+          minimizeIcon.style.display = 'none';
+        }
       });
     }
     
