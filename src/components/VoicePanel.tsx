@@ -89,7 +89,9 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
       {/* Footer */}
       <div className="p-3 text-center text-xs text-slate-400 border-t border-slate-100">
-        <span>Powered by Solutions Bajaj</span>
+        <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
+          Powered by Solutions Bajaj
+        </a>
       </div>
     </div>
   );

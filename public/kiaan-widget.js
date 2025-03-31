@@ -42,7 +42,9 @@
       <elevenlabs-convai agent-id="S4i7eNeg211h4p6hHRXK"></elevenlabs-convai>
     </div>
     <div class="kiaan-panel-footer">
-      <span>Powered by Solutions Bajaj</span>
+      <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; transition: color 0.2s ease; display: inline-block;">
+        Powered by Solutions Bajaj
+      </a>
     </div>
   `;
   container.appendChild(panel);
