@@ -4,6 +4,7 @@ import { Send, Loader2, PaperclipIcon, XCircle, ArrowDown } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { Input } from './ui/input';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FileAttachment {
   name: string;
@@ -28,6 +29,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [userId] = useState(() => {
+    // Try to get user ID from localStorage or generate a new one
+    const storedUserId = localStorage.getItem('kiaan_user_id');
+    if (storedUserId) return storedUserId;
+    
+    const newUserId = uuidv4();
+    localStorage.setItem('kiaan_user_id', newUserId);
+    return newUserId;
+  });
 
   // Allowed file types
   const allowedFileTypes = '.pdf,.csv,.jpeg,.jpg,.png,.webp,.xlsx,.docx';
@@ -121,6 +131,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
     setIsLoading(true);
 
     try {
+      // Create timestamp
+      const timestamp = new Date().toISOString();
+      
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -128,7 +141,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         },
         body: JSON.stringify({ 
           message: userMessage,
-          attachments: attachments.length > 0 ? attachments : undefined
+          attachments: attachments.length > 0 ? attachments : undefined,
+          userId: userId,
+          timestamp: timestamp
         }),
       });
 
@@ -136,15 +151,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         throw new Error('Failed to get response');
       }
 
+      // Get response as text first
       const responseText = await response.text();
       console.log('Webhook response text:', responseText);
       
       // Check if the response is a valid JSON string
       let data;
       try {
-        data = JSON.parse(responseText);
+        // Only try to parse if there's actual content
+        if (responseText && responseText.trim()) {
+          data = JSON.parse(responseText);
+        } else {
+          // Handle empty response
+          throw new Error('Empty response received');
+        }
       } catch (jsonError) {
         console.error('Error parsing JSON:', jsonError);
+        // If text is not JSON but has content, show it as plain text response
+        if (responseText && responseText.trim()) {
+          setMessages(prev => [...prev, { 
+            role: 'assistant', 
+            content: responseText
+          }]);
+          setIsLoading(false);
+          return;
+        }
         throw new Error('Invalid response format');
       }
       
