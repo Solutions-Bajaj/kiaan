@@ -101,9 +101,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputMessage.trim() && selectedFiles.length === 0) return;
-
+    
+    // Check if there are files but no message
     const userMessage = inputMessage.trim();
+    if (selectedFiles.length > 0 && !userMessage) {
+      toast.error('Please add a message describing what you want to do with the attached file(s)');
+      return;
+    }
+    
+    // Original check - make sure there's at least a message or files
+    if (!userMessage && selectedFiles.length === 0) return;
+    
     setInputMessage('');
     
     // Convert files to base64
