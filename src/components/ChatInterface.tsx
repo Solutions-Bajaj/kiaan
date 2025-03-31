@@ -1,12 +1,20 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, PaperclipIcon, XCircle, ArrowDown } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
+import { Input } from './ui/input';
+
+interface FileAttachment {
+  name: string;
+  type: string;
+  data: string | ArrayBuffer; // Base64 encoded file content
+}
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+  attachments?: FileAttachment[];
 }
 
 interface ChatInterfaceProps {
@@ -17,7 +25,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Allowed file types
+  const allowedFileTypes = '.pdf,.csv,.jpeg,.jpg,.png,.webp,.xlsx,.docx';
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -28,15 +41,83 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setSelectedFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const openFileSelector = () => {
+    fileInputRef.current?.click();
+  };
+
+  const convertFilesToBase64 = async (files: File[]): Promise<FileAttachment[]> => {
+    const filePromises = files.map(file => {
+      return new Promise<FileAttachment>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (reader.result) {
+            resolve({
+              name: file.name,
+              type: file.type,
+              data: reader.result
+            });
+          } else {
+            reject(new Error('Failed to read file'));
+          }
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    return Promise.all(filePromises);
+  };
+
+  const downloadFile = (attachment: FileAttachment) => {
+    // Create a temporary link to download the file
+    const link = document.createElement('a');
+    link.href = attachment.data as string; // The data should be in Data URL format
+    link.download = attachment.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() && selectedFiles.length === 0) return;
 
     const userMessage = inputMessage.trim();
     setInputMessage('');
     
+    // Convert files to base64
+    let attachments: FileAttachment[] = [];
+    if (selectedFiles.length > 0) {
+      try {
+        attachments = await convertFilesToBase64(selectedFiles);
+      } catch (error) {
+        console.error('Error converting files to base64:', error);
+        toast.error('Failed to process files');
+        return;
+      }
+    }
+
     // Add user message
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessages(prev => [...prev, { 
+      role: 'user', 
+      content: userMessage,
+      attachments: attachments.length > 0 ? attachments : undefined
+    }]);
+    
+    // Clear file selection
+    setSelectedFiles([]);
+    
     setIsLoading(true);
 
     try {
@@ -45,7 +126,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ 
+          message: userMessage,
+          attachments: attachments.length > 0 ? attachments : undefined
+        }),
       });
 
       if (!response.ok) {
@@ -64,10 +148,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         throw new Error('Invalid response format');
       }
       
-      // Add assistant response - handle both response formats
+      // Add assistant response - handle both response formats and attachments
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: data.output || data.response || 'I received your message but was unable to process it properly.'
+        content: data.output || data.response || 'I received your message but was unable to process it properly.',
+        attachments: data.attachments
       }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -105,6 +190,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
                 }`}
               >
                 {message.content}
+                
+                {/* Display attachments if any */}
+                {message.attachments && message.attachments.length > 0 && (
+                  <div className="mt-2 space-y-2">
+                    {message.attachments.map((attachment, i) => (
+                      <div 
+                        key={i} 
+                        className={`flex items-center justify-between p-2 rounded ${
+                          message.role === 'user' 
+                            ? 'bg-blue-600 text-white' 
+                            : 'bg-slate-200 text-slate-800'
+                        }`}
+                      >
+                        <div className="truncate text-sm">{attachment.name}</div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className={`p-1 ${message.role === 'user' ? 'text-white hover:bg-blue-700' : 'text-slate-800 hover:bg-slate-300'}`}
+                          onClick={() => downloadFile(attachment)}
+                        >
+                          <ArrowDown className="w-4 h-4" />
+                          <span className="sr-only">Download</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))
@@ -112,20 +224,62 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Selected files preview */}
+      {selectedFiles.length > 0 && (
+        <div className="border-t border-slate-200 p-2 bg-slate-50">
+          <div className="flex flex-wrap gap-2">
+            {selectedFiles.map((file, index) => (
+              <div key={index} className="flex items-center gap-1 bg-slate-100 rounded-full pl-3 pr-1 py-1">
+                <span className="text-xs text-slate-600 truncate max-w-[150px]">{file.name}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-5 w-5 p-0 rounded-full hover:bg-slate-200" 
+                  onClick={() => removeFile(index)}
+                >
+                  <XCircle className="w-4 h-4" />
+                  <span className="sr-only">Remove</span>
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Input area */}
       <form onSubmit={handleSubmit} className="border-t border-slate-200 p-3">
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={openFileSelector}
+            className="rounded-full"
+          >
+            <PaperclipIcon className="w-5 h-5 text-slate-500" />
+            <span className="sr-only">Attach file</span>
+          </Button>
+          
           <input
-            type="text"
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            multiple
+            accept={allowedFileTypes}
+          />
+          
+          <Input
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type your message..."
             className="flex-1 p-2 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
             disabled={isLoading}
           />
+          
           <Button 
             type="submit" 
-            disabled={isLoading || !inputMessage.trim()} 
+            disabled={isLoading || (!inputMessage.trim() && selectedFiles.length === 0)} 
             className="bg-gradient-to-r from-blue-400 to-purple-400 p-2 rounded-full"
           >
             {isLoading ? (
