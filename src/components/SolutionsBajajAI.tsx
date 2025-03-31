@@ -226,8 +226,17 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
             className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
             onClick={() => handleModeChange('meeting')}
           >
-            <Users className="w-4 h-4" />
-            Meeting Mode
+            {mode === 'meeting' ? (
+              <>
+                <MessageCircle className="w-4 h-4" />
+                Talk with Kiaan
+              </>
+            ) : (
+              <>
+                <Users className="w-4 h-4" />
+                Meeting Mode
+              </>
+            )}
           </Button>
         </div>
       </div>
