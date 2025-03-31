@@ -89,7 +89,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
       {/* Footer */}
       <div className="p-3 text-center text-xs text-slate-400 border-t border-slate-100">
-        <span>Powered by ElevenLabs</span>
+        <span>Powered by Solutions Bajaj</span>
       </div>
     </div>
   );

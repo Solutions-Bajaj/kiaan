@@ -42,7 +42,7 @@ const createKiaanWidget = () => {
       <elevenlabs-convai agent-id="S4i7eNeg211h4p6hHRXK"></elevenlabs-convai>
     </div>
     <div class="kiaan-panel-footer">
-      <span>Powered by ElevenLabs</span>
+      <span>Powered by Solutions Bajaj</span>
     </div>
   `;
   container.appendChild(panel);

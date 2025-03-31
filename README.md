@@ -1,12 +1,12 @@
 
 # Kiaan - Voice Assistant Widget
 
-A futuristic, voice-only assistant widget powered by ElevenLabs AI.
+A futuristic, voice-only assistant widget powered by Solutions Bajaj AI.
 
 ## Features
 
 - Floating, animated assistant orb in the bottom-right corner
-- Seamless integration with ElevenLabs voice agent
+- Seamless integration with voice agent
 - Clean, futuristic white design with subtle animations
 - Fully responsive interface
 - Easy to embed in any website
@@ -47,4 +47,3 @@ You can customize the appearance of the Kiaan assistant by modifying the CSS var
 ## License
 
 MIT
-
