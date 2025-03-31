@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
+import { toast } from 'sonner';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -51,15 +52,28 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
+      const responseText = await response.text();
+      console.log('Webhook response text:', responseText);
       
-      // Add assistant response
+      // Check if the response is a valid JSON string
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error('Error parsing JSON:', jsonError);
+        throw new Error('Invalid response format');
+      }
+      
+      // Add assistant response - handle both response formats
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: data.response || 'I encountered an issue processing your request.'
+        content: data.output || data.response || 'I received your message but was unable to process it properly.'
       }]);
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      toast.error('Failed to get response from the server');
+      
       setMessages(prev => [...prev, { 
         role: 'assistant', 
         content: 'Sorry, I experienced a technical issue. Please try again later.'
