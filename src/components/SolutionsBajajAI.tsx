@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Mic, PhoneOff, MessageCircle, Users } from 'lucide-react';
+import { Mic, PhoneOff, MessageCircle, Users, MessageSquare } from 'lucide-react';
 import { useConversation } from '@11labs/react';
 import { Button } from './ui/button';
+import ChatInterface from './ChatInterface';
 
 interface SolutionsBajajAIProps {
   agentId: string;
@@ -18,16 +19,22 @@ interface ConversationMessage {
   is_final?: boolean;
 }
 
+// Define the available interaction modes
+type InteractionMode = 'chat' | 'meeting' | 'text-chat';
+
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
-  const [mode, setMode] = useState<'chat' | 'meeting'>('chat');
+  const [mode, setMode] = useState<InteractionMode>('chat');
   
   // Define agent IDs for different modes
   const AGENTS = {
     chat: agentId, // Original agent ID passed as prop
     meeting: '0OxkgMLQJmZuT23PE2Cv' // Meeting mode agent ID
   };
+
+  // Define webhook URL for text chat mode
+  const WEBHOOK_URL = "https://choco.solutionsbajaj.com/webhook/sberpkiaan";
 
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
@@ -67,7 +74,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       
       // Start the conversation with the agent ID based on current mode
       await conversation.startSession({ 
-        agentId: AGENTS[mode] 
+        agentId: AGENTS[mode === 'text-chat' ? 'chat' : mode] 
       });
       
       setIsWaitingForMicPermission(false);
@@ -98,147 +105,170 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const isConnected = status === 'connected';
   const isPending = isWaitingForMicPermission || status === 'connecting';
 
-  const handleModeChange = (newMode: 'chat' | 'meeting') => {
+  const handleModeChange = (newMode: InteractionMode) => {
     setMode(newMode);
     // If we're already connected, restart the conversation with the new mode
-    if (isConnected) {
+    if (isConnected && newMode !== 'text-chat') {
       handleStop().then(() => {
         handleStart();
       });
+    } else if (isConnected && mode !== 'text-chat' && newMode === 'text-chat') {
+      // If switching to text chat from voice, just stop the voice conversation
+      handleStop();
     }
   };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center relative">
-      {/* Futuristic animation background */}
-      <div 
-        className={`absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none`}
-      >
-        {/* Speaking animation - outward movement */}
-        {isConnected && isSpeaking && (
-          <div className="relative">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={`speak-ring-${i}`}
-                className="absolute rounded-full border border-blue-400/30"
-                style={{
-                  width: `${100 + i * 40}px`,
-                  height: `${100 + i * 40}px`,
-                  animation: `speakPulseOut ${1.5 + i * 0.3}s infinite ease-out`,
-                  animationDelay: `${i * 0.2}s`,
-                  opacity: 0.7 - i * 0.1,
-                }}
-              />
-            ))}
-          </div>
-        )}
-        
-        {/* Listening animation - inward movement */}
-        {isConnected && !isSpeaking && (
-          <div className="relative">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={`listen-ring-${i}`}
-                className="absolute rounded-full border border-green-400/30"
-                style={{
-                  width: `${300 - i * 40}px`,
-                  height: `${300 - i * 40}px`,
-                  animation: `listenPulseIn ${1.5 + i * 0.3}s infinite ease-in`,
-                  animationDelay: `${i * 0.2}s`,
-                  opacity: 0.7 - i * 0.1,
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Main content */}
-      <div className="text-center space-y-6 max-w-md z-10">
-        <h3 className="text-xl font-medium text-slate-700">
-          {mode === 'chat' ? 'Talk With Kiaan' : 'Meeting Mode'}
-        </h3>
-        
-        {/* Debug message showing current status */}
-        <div className="text-sm text-slate-500">
-          Status: {status} {isPending ? "(Connecting...)" : ""}
-          {isConnected && isSpeaking ? " (Agent is speaking)" : ""}
-        </div>
-        
-        <div className="flex items-center justify-center gap-4">
-          {/* Main microphone button */}
-          {!isConnected ? (
-            <button
-              onClick={handleStart}
-              disabled={isPending}
-              className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
-                isPending
-                  ? "bg-indigo-100 text-indigo-500 animate-pulse"
-                  : "bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:shadow-lg hover:scale-105"
-              }`}
-              aria-label="Start conversation"
-            >
-              {isPending ? (
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-500"></div>
-              ) : (
-                <Mic className="w-8 h-8" />
-              )}
-            </button>
-          ) : (
-            <>
-              {/* Hang Up Button */}
-              <button
-                onClick={handleStop}
-                className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600"
-                aria-label="End conversation"
-              >
-                <PhoneOff className="w-8 h-8" />
-              </button>
-            </>
+      {/* Futuristic animation background - only visible in voice modes */}
+      {mode !== 'text-chat' && (
+        <div 
+          className={`absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none`}
+        >
+          {/* Speaking animation - outward movement */}
+          {isConnected && isSpeaking && (
+            <div className="relative">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={`speak-ring-${i}`}
+                  className="absolute rounded-full border border-blue-400/30"
+                  style={{
+                    width: `${100 + i * 40}px`,
+                    height: `${100 + i * 40}px`,
+                    animation: `speakPulseOut ${1.5 + i * 0.3}s infinite ease-out`,
+                    animationDelay: `${i * 0.2}s`,
+                    opacity: 0.7 - i * 0.1,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Listening animation - inward movement */}
+          {isConnected && !isSpeaking && (
+            <div className="relative">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={`listen-ring-${i}`}
+                  className="absolute rounded-full border border-green-400/30"
+                  style={{
+                    width: `${300 - i * 40}px`,
+                    height: `${300 - i * 40}px`,
+                    animation: `listenPulseIn ${1.5 + i * 0.3}s infinite ease-in`,
+                    animationDelay: `${i * 0.2}s`,
+                    opacity: 0.7 - i * 0.1,
+                  }}
+                />
+              ))}
+            </div>
           )}
         </div>
-        
-        <p className="text-sm text-slate-500 mt-2">
-          {isPending
-            ? "Waiting for microphone permission..."
-            : isConnected
-              ? isSpeaking 
-                ? mode === 'chat' ? "Kiaan is speaking..." : "In meeting mode..."
-                : mode === 'chat' ? "Kiaan is listening..." : "Meeting mode is listening..."
-              : mode === 'chat' 
-                ? "Tap the microphone to start speaking with Kiaan" 
-                : "Tap the microphone to start a meeting"}
-        </p>
-        
-        {/* Mode selection buttons */}
-        <div className="flex space-x-4 justify-center mt-6">
-          <Button 
-            variant={mode === 'chat' ? 'default' : 'outline'} 
-            className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
-            onClick={() => handleModeChange('chat')}
-          >
-            <MessageCircle className="w-4 h-4" />
-            Chat with Kiaan
-          </Button>
+      )}
+
+      {/* Main content */}
+      {mode === 'text-chat' ? (
+        <div className="text-center w-full h-full flex flex-col z-10">
+          <h3 className="text-xl font-medium text-slate-700 py-1">Chat with Kiaan</h3>
+          <div className="flex-1 overflow-hidden">
+            <ChatInterface webhookUrl={WEBHOOK_URL} />
+          </div>
+        </div>
+      ) : (
+        <div className="text-center space-y-6 max-w-md z-10">
+          <h3 className="text-xl font-medium text-slate-700">
+            {mode === 'chat' ? 'Talk With Kiaan' : 'Meeting Mode'}
+          </h3>
           
-          <Button 
-            variant={mode === 'meeting' ? 'default' : 'outline'} 
-            className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
-            onClick={() => handleModeChange('meeting')}
-          >
-            {mode === 'meeting' ? (
-              <>
-                <MessageCircle className="w-4 h-4" />
-                Talk with Kiaan
-              </>
+          {/* Debug message showing current status */}
+          <div className="text-sm text-slate-500">
+            Status: {status} {isPending ? "(Connecting...)" : ""}
+            {isConnected && isSpeaking ? " (Agent is speaking)" : ""}
+          </div>
+          
+          <div className="flex items-center justify-center gap-4">
+            {/* Main microphone button */}
+            {!isConnected ? (
+              <button
+                onClick={handleStart}
+                disabled={isPending}
+                className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+                  isPending
+                    ? "bg-indigo-100 text-indigo-500 animate-pulse"
+                    : "bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:shadow-lg hover:scale-105"
+                }`}
+                aria-label="Start conversation"
+              >
+                {isPending ? (
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-500"></div>
+                ) : (
+                  <Mic className="w-8 h-8" />
+                )}
+              </button>
             ) : (
               <>
-                <Users className="w-4 h-4" />
-                Meeting Mode
+                {/* Hang Up Button */}
+                <button
+                  onClick={handleStop}
+                  className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600"
+                  aria-label="End conversation"
+                >
+                  <PhoneOff className="w-8 h-8" />
+                </button>
               </>
             )}
-          </Button>
+          </div>
+          
+          <p className="text-sm text-slate-500 mt-2">
+            {isPending
+              ? "Waiting for microphone permission..."
+              : isConnected
+                ? isSpeaking 
+                  ? mode === 'chat' ? "Kiaan is speaking..." : "In meeting mode..."
+                  : mode === 'chat' ? "Kiaan is listening..." : "Meeting mode is listening..."
+                : mode === 'chat' 
+                  ? "Tap the microphone to start speaking with Kiaan" 
+                  : "Tap the microphone to start a meeting"}
+          </p>
         </div>
+      )}
+      
+      {/* Mode selection buttons */}
+      <div className="flex space-x-4 justify-center mt-6">
+        <Button 
+          variant={mode === 'chat' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('chat')}
+        >
+          <MessageCircle className="w-4 h-4" />
+          Talk with Kiaan
+        </Button>
+        
+        <Button 
+          variant={mode === 'meeting' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('meeting')}
+        >
+          {mode === 'meeting' ? (
+            <>
+              <MessageCircle className="w-4 h-4" />
+              Talk with Kiaan
+            </>
+          ) : (
+            <>
+              <Users className="w-4 h-4" />
+              Meeting Mode
+            </>
+          )}
+        </Button>
+        
+        <Button 
+          variant={mode === 'text-chat' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('text-chat')}
+        >
+          <MessageSquare className="w-4 h-4" />
+          Chat with Kiaan
+        </Button>
       </div>
     </div>
   );
