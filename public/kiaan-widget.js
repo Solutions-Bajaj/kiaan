@@ -1,4 +1,3 @@
-
 // Standalone script that can be included in any website to add the Kiaan widget
 (function() {
   // Create container for the widget
@@ -223,6 +222,16 @@
         font-size: 0.75rem;
         color: #94a3b8;
         border-top: 1px solid rgba(226, 232, 240, 1);
+      }
+      
+      .kiaan-panel-footer a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      
+      .kiaan-panel-footer a:hover {
+        color: #3b82f6;
       }
       
       /* Background decorative elements */

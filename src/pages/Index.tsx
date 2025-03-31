@@ -8,7 +8,7 @@ const Index = () => {
         <h1 className="text-4xl font-bold mb-4 text-slate-800">Meet Kiaan</h1>
         <p className="text-xl text-slate-600 mb-8">Your futuristic voice-only AI assistant</p>
         <p className="text-slate-500 mb-2">Click the voice orb in the bottom-right corner to start speaking with Kiaan.</p>
-        <p className="text-slate-400 text-sm">Powered by ElevenLabs AI voice technology</p>
+        <p className="text-slate-400 text-sm">Powered by <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Solutions Bajaj</a></p>
       </div>
       
       {/* The Kiaan Voice Assistant will appear in the bottom-right corner */}
