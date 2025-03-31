@@ -155,13 +155,20 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
           {isConnected && isSpeaking ? " (Agent is speaking)" : ""}
         </div>
         
-        {/* Message area */}
+        {/* Message area - Updated to display both user and assistant messages */}
         {messages.length > 0 && (
-          <div className="mt-4 mb-4 max-h-32 overflow-y-auto text-left p-2 bg-slate-50 rounded-lg">
-            {messages.slice(-3).map((message, index) => (
-              <div key={index} className={`mb-2 ${message.role === 'assistant' ? 'text-blue-600' : 'text-slate-700'}`}>
-                <span className="font-semibold">{message.role === 'assistant' ? 'Kiaan: ' : 'You: '}</span>
-                {message.content}
+          <div className="mt-4 mb-4 max-h-64 overflow-y-auto text-left p-4 bg-slate-50 rounded-lg w-full">
+            {messages.map((message, index) => (
+              <div 
+                key={index} 
+                className={`mb-3 p-2 rounded-lg ${
+                  message.role === 'assistant' 
+                    ? 'bg-blue-50 border-l-4 border-blue-400 text-blue-800' 
+                    : 'bg-green-50 border-l-4 border-green-400 text-green-800 ml-4'
+                }`}
+              >
+                <div className="font-semibold text-xs mb-1">{message.role === 'assistant' ? 'Kiaan' : 'You'}</div>
+                <div>{message.content}</div>
               </div>
             ))}
           </div>
