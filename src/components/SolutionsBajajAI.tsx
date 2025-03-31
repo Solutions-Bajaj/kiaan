@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { Mic, MicOff, VolumeX, Volume2 } from 'lucide-react';
+import { Mic, MicOff, VolumeX, Volume2, MessageCircle, Users } from 'lucide-react';
 import { useConversation } from '@11labs/react';
+import { Button } from './ui/button';
 
 interface SolutionsBajajAIProps {
   agentId: string;
@@ -21,6 +22,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [isMuted, setIsMuted] = useState(false);
+  const [mode, setMode] = useState<'chat' | 'meeting'>('chat');
 
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
@@ -99,6 +101,16 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
 
   const isConnected = status === 'connected';
   const isPending = isWaitingForMicPermission || status === 'connecting';
+
+  const handleModeChange = (newMode: 'chat' | 'meeting') => {
+    setMode(newMode);
+    // If we're already connected, restart the conversation with the new mode
+    if (isConnected) {
+      handleStop().then(() => {
+        handleStart();
+      });
+    }
+  };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center relative">
@@ -203,6 +215,27 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
                 : "Kiaan is listening..."
               : "Tap the microphone to start speaking with Kiaan"}
         </p>
+        
+        {/* Mode selection buttons */}
+        <div className="flex space-x-4 justify-center mt-6">
+          <Button 
+            variant={mode === 'chat' ? 'default' : 'outline'} 
+            className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+            onClick={() => handleModeChange('chat')}
+          >
+            <MessageCircle className="w-4 h-4" />
+            Chat with Kiaan
+          </Button>
+          
+          <Button 
+            variant={mode === 'meeting' ? 'default' : 'outline'} 
+            className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+            onClick={() => handleModeChange('meeting')}
+          >
+            <Users className="w-4 h-4" />
+            Meeting Mode
+          </Button>
+        </div>
       </div>
     </div>
   );
