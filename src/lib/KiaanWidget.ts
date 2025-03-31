@@ -1,6 +1,15 @@
-
 // Standalone script that can be included in any website to add the Kiaan widget
 const createKiaanWidget = () => {
+  // Default configuration
+  const defaultConfig = {
+    webhookUrl: "https://choco.solutionsbajaj.com/webhook-test/sberpkiaan"
+  };
+  
+  // Merge with window configuration if available
+  const config = window.kiaanWidgetConfig ? 
+    { ...defaultConfig, ...window.kiaanWidgetConfig } : 
+    defaultConfig;
+
   // Create container for the widget
   const container = document.createElement('div');
   container.id = 'kiaan-voice-assistant-container';
@@ -333,6 +342,15 @@ const createKiaanWidget = () => {
     initWidget();
   }
 };
+
+// Make the config type available for TypeScript
+declare global {
+  interface Window {
+    kiaanWidgetConfig?: {
+      webhookUrl?: string;
+    };
+  }
+}
 
 // Auto-initialize widget when script is loaded
 createKiaanWidget();
