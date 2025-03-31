@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Mic, MicOff, VolumeX, Volume2, MessageCircle, Users, PhoneOff } from 'lucide-react';
+import { Mic, PhoneOff, MessageCircle, Users } from 'lucide-react';
 import { useConversation } from '@11labs/react';
 import { Button } from './ui/button';
 
@@ -21,8 +21,6 @@ interface ConversationMessage {
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isMicMuted, setIsMicMuted] = useState(false);
   const [mode, setMode] = useState<'chat' | 'meeting'>('chat');
 
   // Initialize the ElevenLabs conversation hook
@@ -50,27 +48,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   });
 
   const { status, isSpeaking } = conversation;
-
-  const toggleMute = () => {
-    if (isMuted) {
-      conversation.setVolume({ volume: 1.0 });
-    } else {
-      conversation.setVolume({ volume: 0.0 });
-    }
-    setIsMuted(!isMuted);
-  };
-
-  const toggleMicMute = () => {
-    // Toggle microphone mute state
-    setIsMicMuted(!isMicMuted);
-    
-    // Here you would typically call the conversation API to mute/unmute the microphone
-    // For now, we'll simulate this with a console log
-    console.log(isMicMuted ? 'Unmuting microphone' : 'Muting microphone');
-    
-    // If there's an API method to mute the microphone, it would be called here
-    // For example: conversation.muteMicrophone({ muted: !isMicMuted });
-  };
 
   const handleStart = async () => {
     try {
@@ -201,23 +178,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
             </button>
           ) : (
             <>
-              {/* Mute Mic Button */}
-              <button
-                onClick={toggleMicMute}
-                className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
-                  isMicMuted 
-                    ? "bg-red-500 text-white hover:bg-red-600" 
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-                aria-label={isMicMuted ? "Unmute microphone" : "Mute microphone"}
-              >
-                {isMicMuted ? (
-                  <MicOff className="w-8 h-8" />
-                ) : (
-                  <Mic className="w-8 h-8" />
-                )}
-              </button>
-              
               {/* Hang Up Button */}
               <button
                 onClick={handleStop}
