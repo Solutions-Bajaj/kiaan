@@ -15,6 +15,8 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
     onMessage: (message) => {
+      console.log('Received message:', message);
+      
       if (message.type === 'assistant_response' || message.type === 'assistant_message') {
         setMessages(prev => [...prev, { role: 'assistant', content: message.content }]);
       } else if (message.type === 'transcription') {
@@ -49,8 +51,11 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
     try {
       setIsWaitingForMicPermission(true);
       
-      // Request microphone permission
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Check if microphone permission is already granted
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Important: Release the stream to avoid permission issues
+      stream.getTracks().forEach(track => track.stop());
       
       // Start the conversation with the agent ID
       await conversation.startSession({ 
@@ -76,9 +81,11 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   // Clean up when component unmounts
   useEffect(() => {
     return () => {
-      conversation.endSession();
+      if (status === 'connected') {
+        conversation.endSession();
+      }
     };
-  }, []);
+  }, [status]);
 
   const isConnected = status === 'connected';
   const isPending = isWaitingForMicPermission || status === 'connecting';
@@ -87,6 +94,12 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
     <div className="w-full h-full flex flex-col items-center justify-center">
       <div className="text-center space-y-6 max-w-md">
         <h3 className="text-xl font-medium text-slate-700">Talk With Kiaan</h3>
+        
+        {/* Debug message showing current status */}
+        <div className="text-sm text-slate-500">
+          Status: {status} {isPending ? "(Connecting...)" : ""}
+          {isConnected && isSpeaking ? " (Agent is speaking)" : ""}
+        </div>
         
         {/* Message area */}
         {messages.length > 0 && (
