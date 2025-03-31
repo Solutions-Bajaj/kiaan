@@ -10,6 +10,7 @@ interface VoicePanelProps {
 
 const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const elevenLabsContainerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     // Handle click outside to close
@@ -25,7 +26,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
   // Handle loading the ElevenLabs script when the panel opens
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && elevenLabsContainerRef.current) {
       // Check if script is already loaded
       if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
         const script = document.createElement('script');
@@ -33,6 +34,15 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         script.async = true;
         script.type = 'text/javascript';
         document.body.appendChild(script);
+      }
+      
+      // Create the custom element if it doesn't exist yet
+      if (!elevenLabsContainerRef.current.querySelector('elevenlabs-convai')) {
+        const elevenLabsWidget = document.createElement('elevenlabs-convai');
+        elevenLabsWidget.setAttribute('agent-id', 'S4i7eNeg211h4p6hHRXK');
+        elevenLabsWidget.style.width = '100%';
+        elevenLabsWidget.style.height = '100%';
+        elevenLabsContainerRef.current.appendChild(elevenLabsWidget);
       }
     }
   }, [isOpen]);
@@ -49,18 +59,18 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
     >
       {/* Futuristic background elements */}
       <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-        <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 blur-3xl" />
+        <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 blur-3xl" />
         <div className="absolute top-1/3 -left-12 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-blue-300 blur-2xl" />
         <div className="absolute -bottom-12 left-1/3 w-32 h-32 rounded-full bg-gradient-to-r from-cyan-300 to-blue-200 blur-2xl" />
         
         {/* Grid lines */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iJzIwNzZmZicgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIgLz48L3N2Zz4=')]" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzIwNzZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIgLz48L3N2Zz4=')]" />
       </div>
 
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-300 animate-pulse" />
+          <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
           <h2 className="text-lg font-medium text-slate-700">Kiaan</h2>
         </div>
         <button 
@@ -73,11 +83,8 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Voice Assistant Container */}
-      <div className="flex-1 p-4 overflow-hidden">
-        <elevenlabs-convai 
-          agent-id="S4i7eNeg211h4p6hHRXK"
-          className="w-full h-full"
-        ></elevenlabs-convai>
+      <div ref={elevenLabsContainerRef} className="flex-1 p-4 overflow-hidden">
+        {/* ElevenLabs component will be dynamically inserted here */}
       </div>
 
       {/* Footer */}
