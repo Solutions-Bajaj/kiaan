@@ -141,7 +141,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
       // Create timestamp
       const timestamp = new Date().toISOString();
       
-      const response = await fetch(webhookUrl, {
+      // Use the webhook URL directly from this file
+      const response = await fetch("https://choco.solutionsbajaj.com/webhook-test/sberpkiaan", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
