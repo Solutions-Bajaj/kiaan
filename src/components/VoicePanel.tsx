@@ -1,7 +1,8 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import SolutionsBajajAI from './SolutionsBajajAI';
 
 interface VoicePanelProps {
   isOpen: boolean;
@@ -10,10 +11,9 @@ interface VoicePanelProps {
 
 const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
   const panelRef = useRef<HTMLDivElement>(null);
-  const elevenLabsContainerRef = useRef<HTMLDivElement>(null);
   
-  useEffect(() => {
-    // Handle click outside to close
+  // Handle click outside to close
+  React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node) && isOpen) {
         onClose();
@@ -23,29 +23,6 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
-
-  // Handle loading the ElevenLabs script when the panel opens
-  useEffect(() => {
-    if (isOpen && elevenLabsContainerRef.current) {
-      // Check if script is already loaded
-      if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
-        const script = document.createElement('script');
-        script.src = 'https://elevenlabs.io/convai-widget/index.js';
-        script.async = true;
-        script.type = 'text/javascript';
-        document.body.appendChild(script);
-      }
-      
-      // Create the custom element if it doesn't exist yet
-      if (!elevenLabsContainerRef.current.querySelector('elevenlabs-convai')) {
-        const elevenLabsWidget = document.createElement('elevenlabs-convai');
-        elevenLabsWidget.setAttribute('agent-id', 'S4i7eNeg211h4p6hHRXK');
-        elevenLabsWidget.style.width = '100%';
-        elevenLabsWidget.style.height = '100%';
-        elevenLabsContainerRef.current.appendChild(elevenLabsWidget);
-      }
-    }
-  }, [isOpen]);
 
   return (
     <div
@@ -83,8 +60,8 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Voice Assistant Container */}
-      <div ref={elevenLabsContainerRef} className="flex-1 p-4 overflow-hidden">
-        {/* ElevenLabs component will be dynamically inserted here */}
+      <div className="flex-1 p-4 overflow-hidden">
+        {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
       </div>
 
       {/* Footer */}

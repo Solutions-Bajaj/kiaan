@@ -1,3 +1,4 @@
+
 // Standalone script that can be included in any website to add the Kiaan widget
 (function() {
   // Create container for the widget
@@ -37,24 +38,49 @@
         </svg>
       </button>
     </div>
-    <div class="kiaan-panel-content">
-      <elevenlabs-convai agent-id="S4i7eNeg211h4p6hHRXK"></elevenlabs-convai>
+    <div class="kiaan-panel-content" id="kiaan-ai-content">
+      <!-- AI content will be added here -->
     </div>
     <div class="kiaan-panel-footer">
-      <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; transition: color 0.2s ease; display: inline-block;">
+      <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer">
         Powered by Solutions Bajaj
       </a>
     </div>
   `;
   container.appendChild(panel);
 
-  // Load ElevenLabs script
-  const loadElevenLabsScript = () => {
-    const script = document.createElement('script');
-    script.src = 'https://elevenlabs.io/convai-widget/index.js';
-    script.async = true;
-    script.type = 'text/javascript';
-    document.body.appendChild(script);
+  // Create and add the AI widget
+  const createAIWidget = () => {
+    // Load the script if not already loaded
+    if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://elevenlabs.io/convai-widget/index.js';
+      script.async = true;
+      script.type = 'text/javascript';
+      document.body.appendChild(script);
+      
+      // After script loads, create the widget
+      script.onload = () => {
+        const contentContainer = document.getElementById('kiaan-ai-content');
+        if (contentContainer) {
+          const widgetNode = document.createElement('elevenlabs-convai');
+          widgetNode.setAttribute('agent-id', 'S4i7eNeg211h4p6hHRXK');
+          widgetNode.style.width = '100%';
+          widgetNode.style.height = '100%';
+          contentContainer.appendChild(widgetNode);
+        }
+      };
+    } else {
+      // Script already loaded, just create the widget
+      const contentContainer = document.getElementById('kiaan-ai-content');
+      if (contentContainer && !contentContainer.querySelector('elevenlabs-convai')) {
+        const widgetNode = document.createElement('elevenlabs-convai');
+        widgetNode.setAttribute('agent-id', 'S4i7eNeg211h4p6hHRXK');
+        widgetNode.style.width = '100%';
+        widgetNode.style.height = '100%';
+        contentContainer.appendChild(widgetNode);
+      }
+    }
   };
 
   // Add styles
@@ -295,11 +321,7 @@
       isOpen = true;
       panel.classList.add('open');
       orb.classList.add('hidden');
-      
-      // Load ElevenLabs script if not already loaded
-      if (!document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
-        loadElevenLabsScript();
-      }
+      createAIWidget();
     });
     
     const closeBtn = panel.querySelector('.kiaan-close-btn');
