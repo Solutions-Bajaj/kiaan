@@ -26,8 +26,7 @@ function App() {
   return (
     <div>
       <h1>Your Application</h1>
-      {/* Update the webhookUrl prop to your backend endpoint */}
-      <KiaanVoiceAssistant webhookUrl="https://choco.solutionsbajaj.com/webhook-test/sberpkiaan" />
+      <KiaanVoiceAssistant />
     </div>
   );
 }
@@ -41,27 +40,9 @@ For non-React websites, add this simple HTML snippet:
 <!-- Add this to your HTML -->
 <link rel="stylesheet" href="https://your-site.com/kiaan-widget.css">
 <script src="https://your-site.com/kiaan-widget.js"></script>
-<!-- Note: Update the webhook URL in the implementation script when used in production -->
-<script>
-  // You can configure the widget with parameters
-  window.kiaanWidgetConfig = {
-    webhookUrl: "https://choco.solutionsbajaj.com/webhook-test/sberpkiaan"
-  };
-</script>
 ```
 
 ## API Integration
-
-### Webhook Configuration
-
-**Important: The current implementation uses the following webhook URL:**
-```
-https://choco.solutionsbajaj.com/webhook-test/sberpkiaan
-```
-
-To change this in production, you'll need to update:
-1. The `webhookUrl` prop in the React component implementation
-2. The `webhookUrl` configuration in the standalone JavaScript widget
 
 ### Webhook Request Format
 
@@ -82,8 +63,8 @@ When a user interacts with the chat interface, the following JSON payload is sen
 }
 ```
 
-- `message`: The text input from the user (required when sending attachments)
-- `attachments`: File attachment (optional, limited to one file per message)
+- `message`: The text input from the user (may be empty if only files are sent)
+- `attachments`: Array of file attachments (optional)
 - `userId`: A unique identifier for the user, persisted across sessions
 - `timestamp`: ISO timestamp when the request was sent
 

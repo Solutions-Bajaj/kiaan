@@ -1,17 +1,20 @@
-import React from 'react';
-import ChatInterface from './ChatInterface';
 
-interface KiaanVoiceAssistantProps {
-  webhookUrl?: string;
-}
+import React, { useState } from 'react';
+import VoiceOrb from './VoiceOrb';
+import VoicePanel from './VoicePanel';
 
-const KiaanVoiceAssistant: React.FC<KiaanVoiceAssistantProps> = ({ 
-  webhookUrl = "https://choco.solutionsbajaj.com/webhook-test/sberpkiaan" 
-}) => {
+const KiaanVoiceAssistant: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePanel = () => {
+    setIsOpen(prev => !prev);
+  };
+
   return (
-    <div className="kiaan-voice-assistant">
-      <ChatInterface webhookUrl={webhookUrl} />
-    </div>
+    <>
+      <VoiceOrb isOpen={isOpen} onClick={togglePanel} />
+      <VoicePanel isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </>
   );
 };
 
