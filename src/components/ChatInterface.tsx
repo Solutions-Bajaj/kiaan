@@ -26,7 +26,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [userId] = useState(() => {
@@ -52,41 +52,40 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      setSelectedFiles(prev => [...prev, ...newFiles]);
+    if (e.target.files && e.target.files.length > 0) {
+      // Only take the first file if multiple are selected
+      setSelectedFile(e.target.files[0]);
+      
+      // Reset the file input value to allow selecting the same file again
+      e.target.value = '';
     }
   };
 
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  const removeFile = () => {
+    setSelectedFile(null);
   };
 
   const openFileSelector = () => {
     fileInputRef.current?.click();
   };
 
-  const convertFilesToBase64 = async (files: File[]): Promise<FileAttachment[]> => {
-    const filePromises = files.map(file => {
-      return new Promise<FileAttachment>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          if (reader.result) {
-            resolve({
-              name: file.name,
-              type: file.type,
-              data: reader.result
-            });
-          } else {
-            reject(new Error('Failed to read file'));
-          }
-        };
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
-      });
+  const convertFileToBase64 = async (file: File): Promise<FileAttachment> => {
+    return new Promise<FileAttachment>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          resolve({
+            name: file.name,
+            type: file.type,
+            data: reader.result
+          });
+        } else {
+          reject(new Error('Failed to read file'));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
     });
-
-    return Promise.all(filePromises);
   };
 
   const downloadFile = (attachment: FileAttachment) => {
@@ -102,26 +101,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if there are files but no message
+    // Check if there is a file but no message
     const userMessage = inputMessage.trim();
-    if (selectedFiles.length > 0 && !userMessage) {
-      toast.error('Please add a message describing what you want to do with the attached file(s)');
+    if (selectedFile && !userMessage) {
+      toast.error('Please add a message describing what you want to do with the attached file');
       return;
     }
     
-    // Original check - make sure there's at least a message or files
-    if (!userMessage && selectedFiles.length === 0) return;
+    // Make sure there's at least a message or a file
+    if (!userMessage && !selectedFile) return;
     
     setInputMessage('');
     
-    // Convert files to base64
-    let attachments: FileAttachment[] = [];
-    if (selectedFiles.length > 0) {
+    // Convert file to base64
+    let attachment: FileAttachment | undefined;
+    if (selectedFile) {
       try {
-        attachments = await convertFilesToBase64(selectedFiles);
+        attachment = await convertFileToBase64(selectedFile);
       } catch (error) {
-        console.error('Error converting files to base64:', error);
-        toast.error('Failed to process files');
+        console.error('Error converting file to base64:', error);
+        toast.error('Failed to process file');
         return;
       }
     }
@@ -130,11 +129,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
     setMessages(prev => [...prev, { 
       role: 'user', 
       content: userMessage,
-      attachments: attachments.length > 0 ? attachments : undefined
+      attachments: attachment ? [attachment] : undefined
     }]);
     
     // Clear file selection
-    setSelectedFiles([]);
+    setSelectedFile(null);
     
     setIsLoading(true);
 
@@ -149,7 +148,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         },
         body: JSON.stringify({ 
           message: userMessage,
-          attachments: attachments.length > 0 ? attachments : undefined,
+          attachments: attachment ? [attachment] : undefined,
           userId: userId,
           timestamp: timestamp
         }),
@@ -263,24 +262,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Selected files preview */}
-      {selectedFiles.length > 0 && (
+      {/* Selected file preview */}
+      {selectedFile && (
         <div className="border-t border-slate-200 p-2 bg-slate-50">
           <div className="flex flex-wrap gap-2">
-            {selectedFiles.map((file, index) => (
-              <div key={index} className="flex items-center gap-1 bg-slate-100 rounded-full pl-3 pr-1 py-1">
-                <span className="text-xs text-slate-600 truncate max-w-[150px]">{file.name}</span>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-5 w-5 p-0 rounded-full hover:bg-slate-200" 
-                  onClick={() => removeFile(index)}
-                >
-                  <XCircle className="w-4 h-4" />
-                  <span className="sr-only">Remove</span>
-                </Button>
-              </div>
-            ))}
+            <div className="flex items-center gap-1 bg-slate-100 rounded-full pl-3 pr-1 py-1">
+              <span className="text-xs text-slate-600 truncate max-w-[150px]">{selectedFile.name}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-5 w-5 p-0 rounded-full hover:bg-slate-200" 
+                onClick={removeFile}
+              >
+                <XCircle className="w-4 h-4" />
+                <span className="sr-only">Remove</span>
+              </Button>
+            </div>
           </div>
         </div>
       )}
@@ -294,6 +291,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
             size="icon"
             onClick={openFileSelector}
             className="rounded-full"
+            disabled={!!selectedFile}
           >
             <PaperclipIcon className="w-5 h-5 text-slate-500" />
             <span className="sr-only">Attach file</span>
@@ -304,7 +302,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
             ref={fileInputRef}
             onChange={handleFileChange}
             className="hidden"
-            multiple
             accept={allowedFileTypes}
           />
           
@@ -318,7 +315,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
           
           <Button 
             type="submit" 
-            disabled={isLoading || (!inputMessage.trim() && selectedFiles.length === 0)} 
+            disabled={isLoading || (!inputMessage.trim() && !selectedFile)} 
             className="bg-gradient-to-r from-blue-400 to-purple-400 p-2 rounded-full"
           >
             {isLoading ? (
