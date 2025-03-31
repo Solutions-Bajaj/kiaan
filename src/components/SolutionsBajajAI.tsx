@@ -22,6 +22,12 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [mode, setMode] = useState<'chat' | 'meeting'>('chat');
+  
+  // Define agent IDs for different modes
+  const AGENTS = {
+    chat: agentId, // Original agent ID passed as prop
+    meeting: '0OxkgMLQJmZuT23PE2Cv' // Meeting mode agent ID
+  };
 
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
@@ -59,9 +65,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       // Important: Release the stream to avoid permission issues
       stream.getTracks().forEach(track => track.stop());
       
-      // Start the conversation with the agent ID
+      // Start the conversation with the agent ID based on current mode
       await conversation.startSession({ 
-        agentId: agentId 
+        agentId: AGENTS[mode] 
       });
       
       setIsWaitingForMicPermission(false);
@@ -149,7 +155,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
 
       {/* Main content */}
       <div className="text-center space-y-6 max-w-md z-10">
-        <h3 className="text-xl font-medium text-slate-700">Talk With Kiaan</h3>
+        <h3 className="text-xl font-medium text-slate-700">
+          {mode === 'chat' ? 'Talk With Kiaan' : 'Meeting Mode'}
+        </h3>
         
         {/* Debug message showing current status */}
         <div className="text-sm text-slate-500">
@@ -195,9 +203,11 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
             ? "Waiting for microphone permission..."
             : isConnected
               ? isSpeaking 
-                ? "Kiaan is speaking..." 
-                : "Kiaan is listening..."
-              : "Tap the microphone to start speaking with Kiaan"}
+                ? mode === 'chat' ? "Kiaan is speaking..." : "In meeting mode..."
+                : mode === 'chat' ? "Kiaan is listening..." : "Meeting mode is listening..."
+              : mode === 'chat' 
+                ? "Tap the microphone to start speaking with Kiaan" 
+                : "Tap the microphone to start a meeting"}
         </p>
         
         {/* Mode selection buttons */}
