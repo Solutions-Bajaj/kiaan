@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,34 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Futuristic animation keyframes */
+@keyframes speakPulseOut {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes listenPulseIn {
+  0% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
   }
 }

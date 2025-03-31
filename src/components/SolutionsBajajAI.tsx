@@ -7,19 +7,15 @@ interface SolutionsBajajAIProps {
   agentId: string;
 }
 
-// Define interfaces for the message types we expect to receive
-interface AssistantMessage {
-  message: string;
-  source: 'assistant';
-}
+// Define type for the message source
+type Role = 'assistant' | 'user' | 'system' | 'ai';
 
-interface UserMessage {
+// Properly type the message interface to match what the useConversation hook provides
+interface ConversationMessage {
   message: string;
-  source: 'user';
+  source: Role;
   is_final?: boolean;
 }
-
-type Message = AssistantMessage | UserMessage;
 
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
@@ -28,10 +24,10 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
 
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
-    onMessage: (message: Message) => {
+    onMessage: (message: ConversationMessage) => {
       console.log('Received message:', message);
       
-      if (message.source === 'assistant') {
+      if (message.source === 'assistant' || message.source === 'ai') {
         setMessages(prev => [...prev, { role: 'assistant', content: message.message }]);
       } else if (message.source === 'user') {
         if (message.is_final) {
@@ -105,8 +101,52 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const isPending = isWaitingForMicPermission || status === 'connecting';
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      <div className="text-center space-y-6 max-w-md">
+    <div className="w-full h-full flex flex-col items-center justify-center relative">
+      {/* Futuristic animation background */}
+      <div 
+        className={`absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none`}
+      >
+        {/* Speaking animation - outward movement */}
+        {isConnected && isSpeaking && (
+          <div className="relative">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`speak-ring-${i}`}
+                className="absolute rounded-full border border-blue-400/30"
+                style={{
+                  width: `${100 + i * 40}px`,
+                  height: `${100 + i * 40}px`,
+                  animation: `speakPulseOut ${1.5 + i * 0.3}s infinite ease-out`,
+                  animationDelay: `${i * 0.2}s`,
+                  opacity: 0.7 - i * 0.1,
+                }}
+              />
+            ))}
+          </div>
+        )}
+        
+        {/* Listening animation - inward movement */}
+        {isConnected && !isSpeaking && (
+          <div className="relative">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`listen-ring-${i}`}
+                className="absolute rounded-full border border-green-400/30"
+                style={{
+                  width: `${300 - i * 40}px`,
+                  height: `${300 - i * 40}px`,
+                  animation: `listenPulseIn ${1.5 + i * 0.3}s infinite ease-in`,
+                  animationDelay: `${i * 0.2}s`,
+                  opacity: 0.7 - i * 0.1,
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Main content */}
+      <div className="text-center space-y-6 max-w-md z-10">
         <h3 className="text-xl font-medium text-slate-700">Talk With Kiaan</h3>
         
         {/* Debug message showing current status */}
