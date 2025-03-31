@@ -7,6 +7,20 @@ interface SolutionsBajajAIProps {
   agentId: string;
 }
 
+// Define interfaces for the message types we expect to receive
+interface AssistantMessage {
+  message: string;
+  source: 'assistant';
+}
+
+interface UserMessage {
+  message: string;
+  source: 'user';
+  is_final?: boolean;
+}
+
+type Message = AssistantMessage | UserMessage;
+
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
@@ -14,14 +28,14 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
 
   // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
-    onMessage: (message) => {
+    onMessage: (message: Message) => {
       console.log('Received message:', message);
       
-      if (message.type === 'assistant_response' || message.type === 'assistant_message') {
-        setMessages(prev => [...prev, { role: 'assistant', content: message.content }]);
-      } else if (message.type === 'transcription') {
+      if (message.source === 'assistant') {
+        setMessages(prev => [...prev, { role: 'assistant', content: message.message }]);
+      } else if (message.source === 'user') {
         if (message.is_final) {
-          setMessages(prev => [...prev, { role: 'user', content: message.content }]);
+          setMessages(prev => [...prev, { role: 'user', content: message.message }]);
         }
       }
     },
