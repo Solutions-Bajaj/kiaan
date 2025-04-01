@@ -59,6 +59,7 @@ When a user interacts with the chat interface, the following JSON payload is sen
     }
   ],
   "userId": "unique-user-identifier",
+  "userName": "Guest User",
   "timestamp": "2023-06-15T14:30:45.123Z"
 }
 ```
@@ -66,6 +67,7 @@ When a user interacts with the chat interface, the following JSON payload is sen
 - `message`: The text input from the user (may be empty if only files are sent)
 - `attachments`: Array of file attachments (optional)
 - `userId`: A unique identifier for the user, persisted across sessions
+- `userName`: The name of the user, defaults to "Guest User"
 - `timestamp`: ISO timestamp when the request was sent
 
 ### Webhook Response Format

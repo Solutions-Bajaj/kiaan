@@ -38,6 +38,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
     localStorage.setItem('kiaan_user_id', newUserId);
     return newUserId;
   });
+  
+  // Add userName state, stored in localStorage
+  const [userName] = useState(() => {
+    const storedUserName = localStorage.getItem('kiaan_user_name');
+    return storedUserName || 'Guest User';
+  });
 
   // Allowed file types
   const allowedFileTypes = '.pdf,.csv,.jpeg,.jpg,.png,.webp,.xlsx,.docx';
@@ -151,6 +157,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl }) => {
           message: userMessage,
           attachments: attachment ? [attachment] : undefined,
           userId: userId,
+          userName: userName, // Add userName to the payload
           timestamp: timestamp
         }),
       });
