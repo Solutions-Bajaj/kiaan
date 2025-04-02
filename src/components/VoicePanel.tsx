@@ -25,6 +25,15 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
+  // Handle close with page refresh
+  const handleClose = () => {
+    onClose();
+    // Add a small delay to ensure the panel closing animation has time to start
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
   return (
     <>
       {/* Full-screen overlay to prevent clicks on background */}
@@ -63,7 +72,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
           <div className="flex items-center">
             <button 
-              onClick={onClose} 
+              onClick={handleClose} 
               className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
               aria-label="Close Kiaan Voice Assistant"
             >
