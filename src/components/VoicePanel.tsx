@@ -1,6 +1,6 @@
 
-import React, { useRef } from 'react';
-import { X } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { X, Terminal, Code, ChevronsRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SolutionsBajajAI from './SolutionsBajajAI';
 
@@ -11,6 +11,12 @@ interface VoicePanelProps {
 
 const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [terminalMessages, setTerminalMessages] = useState<string[]>([
+    "Agent initializing...",
+    "Loading NLP modules...",
+    "Connecting to voice services...",
+    "Kiaan Assistant ready."
+  ]);
   
   // When the panel is open, prevent body scrolling
   React.useEffect(() => {
@@ -50,7 +56,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           "fixed z-40 flex flex-col rounded-2xl shadow-xl transition-all duration-500 ease-in-out",
           "bg-white/90 backdrop-blur-md border border-slate-200 overflow-hidden",
           // Always use fullscreen dimensions
-          "w-[80vw] h-[80vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+          "w-[90vw] h-[85vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
@@ -81,16 +87,62 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Voice Assistant Container - centered content */}
-        <div className="flex-1 flex items-center justify-center p-4 overflow-hidden">
-          {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
+        {/* Main Content Area - Split into two columns */}
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+          {/* Left Column - Agent Terminal */}
+          <div className="w-full md:w-1/2 border-r border-slate-200 bg-slate-900/90 text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
+              <div className="flex items-center gap-2">
+                <Terminal size={14} />
+                <span>Agent Terminal</span>
+              </div>
+              <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
+              {terminalMessages.map((msg, index) => (
+                <div key={index} className="mb-1 opacity-80">
+                  <span className="text-blue-400 mr-2">&gt;</span>
+                  <span>{msg}</span>
+                </div>
+              ))}
+              
+              <div className="flex items-center mt-3 text-slate-400">
+                <ChevronsRight size={14} className="mr-1" />
+                <span className="animate-pulse">_</span>
+              </div>
+            </div>
+            
+            <div className="mt-2 border-t border-slate-700 pt-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <Code size={12} />
+                <span>System: Kiaan AI v2.4.1</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right Column - Voice Assistant Content */}
+          <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden">
+            {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="p-3 text-center text-xs text-slate-400 border-t border-slate-100">
-          <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
-            Powered by Solutions Bajaj
-          </a>
+        <div className="p-3 border-t border-slate-100 flex flex-col items-center">
+          {/* Mode buttons are now in the footer area */}
+          <div className="flex justify-center space-x-4 mb-2">
+            {/* These buttons are from SolutionsBajajAI component, but we're moving the visual container here */}
+          </div>
+          
+          <div className="text-xs text-slate-400">
+            <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
+              Powered by Solutions Bajaj
+            </a>
+          </div>
         </div>
       </div>
     </>
