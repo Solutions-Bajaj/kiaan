@@ -250,10 +250,10 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
 
   const renderModeButtons = () => {
     return (
-      <div className="flex justify-center space-x-4 relative z-20">
+      <div className="flex justify-center space-x-4 relative z-50">
         <Button 
           variant={mode === 'chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-md' : 'bg-white/10 backdrop-blur-sm text-white border-white/20'}`}
           onClick={() => handleModeChange('chat')}
         >
           <MessageCircle className="w-4 h-4" />
@@ -262,7 +262,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
         
         <Button 
           variant={mode === 'meeting' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-md' : 'bg-white/10 backdrop-blur-sm text-white border-white/20'}`}
           onClick={() => handleModeChange('meeting')}
         >
           <Users className="w-4 h-4" />
@@ -271,7 +271,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
         
         <Button 
           variant={mode === 'text-chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-md' : 'bg-white/10 backdrop-blur-sm text-white border-white/20'}`}
           onClick={() => handleModeChange('text-chat')}
         >
           <MessageSquare className="w-4 h-4" />
@@ -289,7 +289,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
         {renderMainContent()}
       </div>
       
-      <div className="relative z-20">
+      <div className="relative z-50">
         {renderModeButtons()}
       </div>
     </div>
