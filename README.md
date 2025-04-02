@@ -12,8 +12,26 @@ A futuristic, voice-only assistant widget powered by Solutions Bajaj AI.
 - Easy to embed in any website
 - File attachments support (PDF, CSV, JPEG, PNG, WEBP, XLSX, DOCX)
 - Unique user tracking with persistent user IDs
+- **Draggable orb** for flexible positioning on your website
 
-## Usage
+## Installation
+
+### GitHub Repository Installation
+
+1. Clone the repository or download the `kiaan` folder:
+   ```bash
+   git clone https://github.com/solutions-bajaj/kiaan-widget.git
+   ```
+   
+2. Copy the `kiaan` folder to your website's root directory.
+
+3. Add the following code to your website footer (before the closing `</body>` tag):
+   ```html
+   <!-- Kiaan Assistant -->
+   <script src="/kiaan/config.js"></script>
+   <link rel="stylesheet" href="/kiaan/kiaan-widget.css">
+   <script src="/kiaan/kiaan-widget.js"></script>
+   ```
 
 ### React Component
 
@@ -106,7 +124,7 @@ Plain text responses are also supported.
 
 ## Customization
 
-You can customize the appearance of the Kiaan assistant by modifying the CSS variables in the `kiaan-widget.css` file.
+You can customize the appearance of the Kiaan assistant by modifying the CSS variables in the `kiaan-widget.css` file and the settings in the `config.js` file.
 
 ## License
 
