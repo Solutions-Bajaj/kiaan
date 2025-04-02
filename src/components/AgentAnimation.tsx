@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Terminal } from 'lucide-react';
 
 interface AgentAnimationProps {
   isActive: boolean;
@@ -24,18 +23,6 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
-        <div className="flex items-center gap-2">
-          <Terminal size={14} />
-          <span>Agent Terminal</span>
-        </div>
-        <div className="flex gap-1">
-          <div className="w-2 h-2 rounded-full bg-red-500"></div>
-          <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-        </div>
-      </div>
-      
       <div className="flex-1 relative overflow-hidden">
         {/* Matrix-style code rain background */}
         <div className="absolute inset-0 matrix-rain opacity-30"></div>
@@ -92,14 +79,6 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
               <span className="animate-pulse">_</span>
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Agent status display */}
-      <div className="mt-2 pt-2 text-xs text-slate-400 border-t border-slate-700">
-        <div className="flex justify-between">
-          <span>System: Kiaan AI v2.4.1</span>
-          <span>Status: {animationState === 'idle' ? 'Standby' : animationState === 'transitioning' ? 'Initializing' : 'Active'}</span>
         </div>
       </div>
     </div>
