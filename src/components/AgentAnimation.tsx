@@ -7,15 +7,11 @@ interface AgentAnimationProps {
 }
 
 const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) => {
-  const [animationState, setAnimationState] = useState<'idle' | 'transitioning' | 'active'>('idle');
+  const [animationState, setAnimationState] = useState<'idle' | 'active'>('idle');
   
   useEffect(() => {
     if (isActive) {
-      setAnimationState('transitioning');
-      const timer = setTimeout(() => {
-        setAnimationState('active');
-      }, 1000); // Reduced transition time for a more subtle effect
-      return () => clearTimeout(timer);
+      setAnimationState('active');
     } else {
       setAnimationState('idle');
     }
@@ -66,12 +62,6 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
             </div>
           )}
           
-          {animationState === 'transitioning' && (
-            <div className="agent-transition">
-              <div className="fade-transition"></div>
-            </div>
-          )}
-          
           {animationState === 'active' && (
             <div className="agent-active">
               <div className="siri-container">
@@ -84,8 +74,6 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
             </div>
           )}
         </div>
-        
-        {/* Terminal messages overlay has been removed */}
       </div>
     </div>
   );
