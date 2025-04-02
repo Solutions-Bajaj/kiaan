@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,8 +50,8 @@
 
     --sidebar-ring: 217.2 91.2% 59.8%;
     
-    /* Kiaan Animation colors */
-    --agent-teal: #3CEFFF;
+    /* Kiaan Animation colors - updating with bluish theme */
+    --agent-teal: #60a5fa;
     --agent-dark: #1A2C38;
     --agent-light: #E5F9FF;
   }
@@ -175,7 +174,7 @@
   background-size: 20px 20px;
 }
 
-/* New Sphere Animation - IDLE STATE */
+/* New Sphere Animation - IDLE STATE - Enhanced visibility with bluish glow */
 .agent-idle {
   position: relative;
   width: 200px;
@@ -193,14 +192,14 @@
   z-index: 3;
 }
 
-/* Spheres with yellowish-blue colors for better visibility */
+/* Spheres with bluish colors for better visibility */
 .sphere-outer {
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(200, 240, 180, 0.2);
-  box-shadow: 0 0 30px rgba(170, 230, 255, 0.5);
+  background: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 0 30px rgba(96, 165, 250, 0.7);
   animation: pulseSphere 6s ease-in-out infinite;
 }
 
@@ -211,8 +210,8 @@
   width: 70%;
   height: 70%;
   border-radius: 50%;
-  background: rgba(210, 245, 200, 0.25);
-  box-shadow: 0 0 25px rgba(180, 235, 255, 0.6);
+  background: rgba(96, 165, 250, 0.25);
+  box-shadow: 0 0 25px rgba(96, 165, 250, 0.8);
   animation: pulseSphere 6s ease-in-out infinite;
   animation-delay: 0.5s;
 }
@@ -224,8 +223,8 @@
   width: 40%;
   height: 40%;
   border-radius: 50%;
-  background: rgba(220, 250, 220, 0.35);
-  box-shadow: 0 0 20px rgba(190, 240, 255, 0.8);
+  background: rgba(96, 165, 250, 0.35);
+  box-shadow: 0 0 20px rgba(96, 165, 250, 1);
   animation: pulseSphere 6s ease-in-out infinite;
   animation-delay: 1s;
 }
@@ -233,7 +232,7 @@
 @keyframes pulseSphere {
   0%, 100% {
     transform: scale(1);
-    opacity: 0.8;
+    opacity: 0.9;
   }
   50% {
     transform: scale(1.1);
@@ -241,7 +240,7 @@
   }
 }
 
-/* Particles around sphere - brighter */
+/* Particles around sphere - brighter blue */
 .particle-container {
   position: absolute;
   width: 100%;
@@ -253,12 +252,12 @@
   position: absolute;
   width: 5px;
   height: 5px;
-  background: rgba(220, 250, 255, 0.9);
+  background: rgba(96, 165, 250, 0.9);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(190, 240, 180, 1);
+  box-shadow: 0 0 8px rgba(96, 165, 250, 1);
 }
 
-/* Position particles in circle around sphere - individual classes instead of loop */
+/* Position particles classes */
 .particle-1 {
   transform: rotate(30deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
@@ -333,7 +332,7 @@
 
 @keyframes particlePulse {
   0%, 100% {
-    opacity: 0.5;
+    opacity: 0.7;
     transform: rotate(0) translateY(-50px) scale(0.8);
   }
   50% {
@@ -342,11 +341,11 @@
   }
 }
 
-/* Orbits with brighter colors */
+/* Orbits with brighter colors matching the blue theme */
 .orbit {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px solid rgba(190, 235, 210, 0.4);
+  border: 1.5px solid rgba(96, 165, 250, 0.4);
   animation: orbitPulse 4s ease-in-out infinite;
 }
 
@@ -371,11 +370,11 @@
 @keyframes orbitPulse {
   0%, 100% {
     transform: scale(1);
-    opacity: 0.3;
+    opacity: 0.4;
   }
   50% {
     transform: scale(1.05);
-    opacity: 0.6;
+    opacity: 0.7;
   }
 }
 
@@ -388,7 +387,7 @@
   }
 }
 
-/* TRANSITION ANIMATION - keeping the existing styles */
+/* TRANSITION ANIMATION */
 .agent-transition {
   position: relative;
   width: 200px;
@@ -502,7 +501,7 @@
   }
 }
 
-/* ACTIVE STATE ANIMATION - keeping the existing styles */
+/* ACTIVE STATE ANIMATION */
 .agent-active {
   position: relative;
   width: 200px;
