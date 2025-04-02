@@ -1,8 +1,9 @@
 
-import React, { useRef, useState } from 'react';
-import { X, Terminal, Code, ChevronsRight } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SolutionsBajajAI from './SolutionsBajajAI';
+import AgentAnimation from './AgentAnimation';
 
 interface VoicePanelProps {
   isOpen: boolean;
@@ -18,12 +19,16 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
     "Kiaan Assistant ready."
   ]);
   
+  const [isAgentActive, setIsAgentActive] = useState(false);
+  
   // When the panel is open, prevent body scrolling
   React.useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      // Reset agent state when panel closes
+      setIsAgentActive(false);
     }
     
     return () => {
@@ -83,43 +88,17 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           <div className="flex flex-col md:flex-row h-full overflow-hidden">
             {/* Left Column - Agent Terminal with transparent background */}
             <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
-              <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
-                <div className="flex items-center gap-2">
-                  <Terminal size={14} />
-                  <span>Agent Terminal</span>
-                </div>
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                </div>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-                {terminalMessages.map((msg, index) => (
-                  <div key={index} className="mb-1 opacity-80">
-                    <span className="text-blue-400 mr-2">&gt;</span>
-                    <span>{msg}</span>
-                  </div>
-                ))}
-                
-                <div className="flex items-center mt-3 text-slate-400">
-                  <ChevronsRight size={14} className="mr-1" />
-                  <span className="animate-pulse">_</span>
-                </div>
-              </div>
-              
-              <div className="mt-2 border-t border-slate-700 pt-2 text-xs text-slate-400">
-                <div className="flex items-center gap-2">
-                  <Code size={12} />
-                  <span>System: Kiaan AI v2.4.1</span>
-                </div>
-              </div>
+              <AgentAnimation isActive={isAgentActive} messages={terminalMessages} />
             </div>
             
             {/* Right Column - Voice Assistant Content */}
             <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden">
-              {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
+              {isOpen && (
+                <SolutionsBajajAI 
+                  agentId="S4i7eNeg211h4p6hHRXK" 
+                  onActiveStateChange={(active) => setIsAgentActive(active)}
+                />
+              )}
             </div>
           </div>
         </div>

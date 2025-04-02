@@ -50,6 +50,11 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Kiaan Animation colors */
+    --agent-teal: #3CEFFF;
+    --agent-dark: #1A2C38;
+    --agent-light: #E5F9FF;
   }
 
   .dark {
@@ -127,5 +132,414 @@
   100% {
     transform: scale(0.8);
     opacity: 0;
+  }
+}
+
+/* Agent Animation Styles */
+/* Matrix-style code rain animation */
+.matrix-rain {
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(60,239,255,0.05) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.matrix-rain::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 120%;
+  background: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='matrix' patternUnits='userSpaceOnUse' width='20' height='20'%3E%3Ctext x='0' y='15' fill='rgba(60, 239, 255, 0.3)' font-family='monospace' font-size='20'%3E1%3C/text%3E%3Ctext x='10' y='10' fill='rgba(60, 239, 255, 0.2)' font-family='monospace' font-size='10'%3E0%3C/text%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23matrix)'/%3E%3C/svg%3E");
+  animation: matrixRain 15s linear infinite;
+}
+
+@keyframes matrixRain {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+/* Grid overlay */
+.grid-overlay {
+  background-image: 
+    linear-gradient(rgba(60, 239, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 239, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* IDLE STATE ANIMATION */
+.agent-idle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-core {
+  width: 60px;
+  height: 60px;
+  background: var(--agent-dark);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(60, 239, 255, 0.4);
+  position: relative;
+  z-index: 3;
+}
+
+.agent-core::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, transparent 40%, var(--agent-teal));
+  opacity: 0.5;
+  animation: rotateSlow 8s linear infinite;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(60, 239, 255, 0.3);
+  animation: pulsate 3s ease-in-out infinite;
+}
+
+.ring-1 {
+  width: 90px;
+  height: 90px;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 120px;
+  height: 120px;
+  animation-delay: 0.5s;
+}
+
+.ring-3 {
+  width: 150px;
+  height: 150px;
+  animation-delay: 1s;
+}
+
+.data-points {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.data-points::before, .data-points::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--agent-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--agent-teal);
+  opacity: 0;
+  animation: flickerDots 4s ease-in-out infinite;
+}
+
+.data-points::before {
+  top: 30%;
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.data-points::after {
+  bottom: 40%;
+  right: 35%;
+  animation-delay: 2s;
+}
+
+@keyframes pulsate {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+@keyframes rotateSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flickerDots {
+  0%, 100% {
+    opacity: 0;
+  }
+  25%, 75% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* TRANSITION ANIMATION */
+.agent-transition {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transition-core {
+  animation: expandCore 2s forwards;
+}
+
+.transition-ring-1 {
+  animation: expandRing 1.5s forwards !important;
+}
+
+.transition-ring-2 {
+  animation: expandRing 1.7s forwards !important;
+}
+
+.transition-ring-3 {
+  animation: expandRing 1.9s forwards !important;
+}
+
+.transition-mask {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(60, 239, 255, 0.2);
+  border-radius: 50%;
+  z-index: 5;
+  animation: maskToFace 2s forwards;
+  opacity: 0;
+}
+
+.transition-face {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 C22.4 0 0 22.4 0 50 C0 77.6 22.4 100 50 100 C77.6 100 100 77.6 100 50 C100 22.4 77.6 0 50 0' fill='rgba(60, 239, 255, 0.2)'/%3E%3C/svg%3E");
+  background-size: contain;
+  opacity: 0;
+  z-index: 6;
+  animation: faceAppear 2s forwards;
+}
+
+@keyframes expandCore {
+  0% {
+    width: 60px;
+    height: 60px;
+  }
+  50% {
+    width: 100px;
+    height: 100px;
+    background: var(--agent-dark);
+  }
+  100% {
+    width: 140px;
+    height: 180px;
+    border-radius: 40%;
+    background: #1d3244;
+  }
+}
+
+@keyframes expandRing {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes maskToFace {
+  0% {
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+  }
+  50% {
+    width: 100px;
+    height: 100px;
+    opacity: 0.5;
+  }
+  100% {
+    width: 120px;
+    height: 150px;
+    border-radius: 40%;
+    opacity: 0.8;
+  }
+}
+
+@keyframes faceAppear {
+  0%, 60% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  80% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
+
+/* ACTIVE STATE ANIMATION */
+.agent-active {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-face {
+  width: 140px;
+  height: 180px;
+  background: #1d3244;
+  border-radius: 40%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(60, 239, 255, 0.3);
+  overflow: hidden;
+}
+
+.agent-face::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='140' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cmask id='faceMask'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Cellipse cx='70' cy='60' rx='25' ry='15' fill='black'/%3E%3Cellipse cx='70' cy='110' rx='15' ry='10' fill='black'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' fill='rgba(60, 239, 255, 0.05)' mask='url(%23faceMask)'/%3E%3Cpath d='M40,60 L50,70 L60,60 M80,60 L90,70 L100,60' stroke='rgba(60, 239, 255, 0.4)' fill='none'/%3E%3Cpath d='M65,105 L75,105' stroke='rgba(60, 239, 255, 0.4)' fill='none'/%3E%3C/svg%3E");
+  opacity: 0.8;
+  animation: faceFlicker 5s ease-in-out infinite;
+}
+
+.circuit-paths {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0.6;
+  animation: circuitPulse 4s ease-in-out infinite;
+  background-image: url("data:image/svg+xml,%3Csvg width='140' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30,30 L50,50 M90,30 L70,50 M40,120 L60,100 M100,120 L80,100 M70,30 L70,50 M70,150 L70,130' stroke='rgba(60, 239, 255, 0.3)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+}
+
+.glow-eyes {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: var(--agent-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--agent-teal), 0 0 20px var(--agent-teal);
+  z-index: 5;
+  animation: eyeGlow 3s ease-in-out infinite;
+}
+
+.glow-eyes.left {
+  top: 60px;
+  left: 50px;
+}
+
+.glow-eyes.right {
+  top: 60px;
+  right: 50px;
+}
+
+.active-data-points {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+}
+
+.active-data-points::before,
+.active-data-points::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--agent-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 3px var(--agent-teal);
+  animation: activeDots 2s ease-in-out infinite;
+}
+
+.active-data-points::before {
+  top: 40%;
+  left: 30%;
+  animation-delay: 0.5s;
+}
+
+.active-data-points::after {
+  bottom: 30%;
+  right: 35%;
+  animation-delay: 1s;
+}
+
+@keyframes faceFlicker {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes circuitPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes eyeGlow {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px var(--agent-teal), 0 0 20px var(--agent-teal);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--agent-teal), 0 0 30px var(--agent-teal);
+  }
+}
+
+@keyframes activeDots {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
   }
 }

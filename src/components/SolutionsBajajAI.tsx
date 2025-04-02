@@ -7,6 +7,7 @@ import ChatInterface from './ChatInterface';
 
 interface SolutionsBajajAIProps {
   agentId: string;
+  onActiveStateChange?: (isActive: boolean) => void;
 }
 
 // Define type for the message source
@@ -22,7 +23,7 @@ interface ConversationMessage {
 // Define the available interaction modes
 type InteractionMode = 'chat' | 'meeting' | 'text-chat';
 
-const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
+const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveStateChange }) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [mode, setMode] = useState<InteractionMode>('chat');
@@ -78,6 +79,11 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       });
       
       setIsWaitingForMicPermission(false);
+      
+      // Notify parent component that the agent is now active
+      if (onActiveStateChange) {
+        onActiveStateChange(true);
+      }
     } catch (error) {
       console.error('Error starting conversation:', error);
       setIsWaitingForMicPermission(false);
@@ -88,16 +94,34 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
     try {
       await conversation.endSession();
       setMessages([]);
+      
+      // Notify parent component that the agent is now inactive
+      if (onActiveStateChange) {
+        onActiveStateChange(false);
+      }
     } catch (error) {
       console.error('Error ending conversation:', error);
     }
   };
+
+  // Update active state based on conversation status and mode
+  useEffect(() => {
+    if (onActiveStateChange) {
+      // Agent is active if connected in voice mode or in text-chat mode with messages
+      const isActive = (status === 'connected') || 
+                       (mode === 'text-chat' && messages.length > 0);
+      onActiveStateChange(isActive);
+    }
+  }, [status, mode, messages.length, onActiveStateChange]);
 
   // Clean up when component unmounts
   useEffect(() => {
     return () => {
       if (status === 'connected') {
         conversation.endSession();
+        if (onActiveStateChange) {
+          onActiveStateChange(false);
+        }
       }
     };
   }, [status]);
@@ -118,6 +142,13 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
     }
   };
 
+  // Track chat activity for the text chat mode
+  const handleChatActivity = (hasActivity: boolean) => {
+    if (mode === 'text-chat' && onActiveStateChange) {
+      onActiveStateChange(hasActivity);
+    }
+  };
+
   // Main content rendering
   const renderMainContent = () => {
     if (mode === 'text-chat') {
@@ -125,7 +156,10 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
         <div className="text-center w-full h-full flex flex-col z-10">
           <h3 className="text-xl font-medium text-slate-700 py-1">Chat with Kiaan</h3>
           <div className="flex-1 overflow-hidden flex flex-col">
-            <ChatInterface webhookUrl={WEBHOOK_URL} />
+            <ChatInterface 
+              webhookUrl={WEBHOOK_URL} 
+              onActivityChange={handleChatActivity}
+            />
           </div>
         </div>
       );
