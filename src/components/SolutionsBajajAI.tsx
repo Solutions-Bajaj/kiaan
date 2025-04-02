@@ -8,6 +8,7 @@ import ChatInterface from './ChatInterface';
 interface SolutionsBajajAIProps {
   agentId: string;
   onActiveStateChange?: (isActive: boolean) => void;
+  callActive?: boolean; // New prop to receive information about call state
 }
 
 // Define type for the message source
@@ -23,7 +24,11 @@ interface ConversationMessage {
 // Define the available interaction modes
 type InteractionMode = 'chat' | 'meeting' | 'text-chat';
 
-const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveStateChange }) => {
+const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ 
+  agentId, 
+  onActiveStateChange,
+  callActive 
+}) => {
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [mode, setMode] = useState<InteractionMode>('chat');
@@ -129,7 +134,15 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
   const isConnected = status === 'connected';
   const isPending = isWaitingForMicPermission || status === 'connecting';
 
+  // Determine if any voice mode is active
+  const isVoiceModeActive = isConnected && (mode === 'chat' || mode === 'meeting');
+
   const handleModeChange = (newMode: InteractionMode) => {
+    // Don't allow mode changes when a voice call is active
+    if (isVoiceModeActive) {
+      return;
+    }
+    
     setMode(newMode);
     // If we're already connected, restart the conversation with the new mode
     if (isConnected && newMode !== 'text-chat') {
@@ -221,6 +234,12 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
                 ? "Tap the microphone to start speaking with Kiaan" 
                 : "Tap the microphone to start a meeting"}
         </p>
+        
+        {isVoiceModeActive && (
+          <div className="text-xs text-amber-600 mt-2 p-2 bg-amber-50 rounded-md">
+            Please end your current call before switching modes or closing the panel
+          </div>
+        )}
       </div>
     );
   };
@@ -282,6 +301,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
           variant={mode === 'chat' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('chat')}
+          disabled={isVoiceModeActive} // Disable when in voice call
         >
           <MessageCircle className="w-4 h-4" />
           Talk with Kiaan
@@ -291,6 +311,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
           variant={mode === 'meeting' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('meeting')}
+          disabled={isVoiceModeActive} // Disable when in voice call
         >
           <Users className="w-4 h-4" />
           Meeting Mode
@@ -300,6 +321,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
           variant={mode === 'text-chat' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('text-chat')}
+          disabled={isVoiceModeActive} // Disable when in voice call
         >
           <MessageSquare className="w-4 h-4" />
           Chat with Kiaan
@@ -318,7 +340,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
         {renderMainContent()}
       </div>
       
-      {/* Moved the buttons back to this component */}
+      {/* Mode buttons */}
       {renderModeButtons()}
     </div>
   );

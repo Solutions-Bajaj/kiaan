@@ -38,11 +38,14 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
   // Handle close with page refresh
   const handleClose = () => {
-    onClose();
-    // Add a small delay to ensure the panel closing animation has time to start
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+    // Only allow closing if the agent is not active
+    if (!isAgentActive) {
+      onClose();
+      // Add a small delay to ensure the panel closing animation has time to start
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }
   };
 
   return (
@@ -74,8 +77,15 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           <div className="flex items-center">
             <button 
               onClick={handleClose} 
-              className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-              aria-label="Close Kiaan Voice Assistant"
+              className={cn(
+                "p-1 rounded-full transition-colors",
+                isAgentActive 
+                  ? "text-slate-300 bg-slate-100 cursor-not-allowed" 
+                  : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              )}
+              disabled={isAgentActive}
+              aria-label={isAgentActive ? "End call before closing" : "Close Kiaan Voice Assistant"}
+              title={isAgentActive ? "End call before closing" : "Close Kiaan Voice Assistant"}
             >
               <X className="h-5 w-5" />
             </button>
@@ -97,6 +107,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
                 <SolutionsBajajAI 
                   agentId="S4i7eNeg211h4p6hHRXK" 
                   onActiveStateChange={(active) => setIsAgentActive(active)}
+                  callActive={isAgentActive} // Pass down the active state to control button disabling
                 />
               )}
             </div>

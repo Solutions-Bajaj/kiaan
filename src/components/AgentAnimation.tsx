@@ -65,10 +65,16 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           {animationState === 'active' && (
             <div className="agent-active">
               <div className="siri-container">
-                <div className="siri-glow"></div>
-                {/* Siri-like wave bars */}
+                <div className="siri-glow bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                {/* Siri-like wave bars with gradient colors matching the orb */}
                 {[...Array(12)].map((_, i) => (
-                  <div key={i} className={`siri-bar siri-bar-${i + 1}`}></div>
+                  <div 
+                    key={i} 
+                    className={`siri-bar siri-bar-${i + 1}`}
+                    style={{
+                      background: 'linear-gradient(to right, #60a5fa, #8b5cf6)',
+                    }}
+                  ></div>
                 ))}
               </div>
             </div>
