@@ -46,16 +46,16 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
           {/* Circuit lines */}
           <path 
             d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" 
-            stroke="white" 
+            stroke="#60a5fa" 
             strokeWidth="1" 
             strokeLinecap="round" 
-            strokeOpacity="0.6"
+            strokeOpacity="0.8"
           />
           {/* Connection dots */}
-          <circle cx="8" cy="8" r="1" fill="white" fillOpacity="0.8" />
-          <circle cx="8" cy="16" r="1" fill="white" fillOpacity="0.8" />
-          <circle cx="16" cy="8" r="1" fill="white" fillOpacity="0.8" />
-          <circle cx="16" cy="16" r="1" fill="white" fillOpacity="0.8" />
+          <circle cx="8" cy="8" r="1" fill="#60a5fa" fillOpacity="0.8" />
+          <circle cx="8" cy="16" r="1" fill="#60a5fa" fillOpacity="0.8" />
+          <circle cx="16" cy="8" r="1" fill="#60a5fa" fillOpacity="0.8" />
+          <circle cx="16" cy="16" r="1" fill="#60a5fa" fillOpacity="0.8" />
         </svg>
         
         {/* Glow effects */}

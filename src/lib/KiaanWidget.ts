@@ -14,11 +14,11 @@ const createKiaanWidget = () => {
   orb.innerHTML = `
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M8 4V20M8 13L16 20M8 11L16 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" stroke="white" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
-      <circle cx="8" cy="8" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="8" cy="16" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="16" cy="8" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="16" cy="16" r="1" fill="white" fill-opacity="0.8" />
+      <path d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" stroke="#60a5fa" stroke-width="1" stroke-linecap="round" stroke-opacity="0.8"/>
+      <circle cx="8" cy="8" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="8" cy="16" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="16" cy="8" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="16" cy="16" r="1" fill="#60a5fa" fill-opacity="0.8" />
     </svg>
     <div class="kiaan-pulse-ring"></div>
   `;
