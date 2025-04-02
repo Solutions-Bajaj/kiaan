@@ -124,7 +124,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       return (
         <div className="text-center w-full h-full flex flex-col z-10">
           <h3 className="text-xl font-medium text-slate-700 py-1">Chat with Kiaan</h3>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden flex flex-col">
             <ChatInterface webhookUrl={WEBHOOK_URL} />
           </div>
         </div>
@@ -248,36 +248,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       {/* Main content area */}
       <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
         {renderMainContent()}
-      </div>
-      
-      {/* Mode buttons moved to the parent footer */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center space-x-4 bg-white/50 backdrop-blur-sm border-t border-slate-200 z-20">
-        <Button 
-          variant={mode === 'chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
-          onClick={() => handleModeChange('chat')}
-        >
-          <MessageCircle className="w-4 h-4" />
-          Talk with Kiaan
-        </Button>
-        
-        <Button 
-          variant={mode === 'meeting' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
-          onClick={() => handleModeChange('meeting')}
-        >
-          <Users className="w-4 h-4" />
-          Meeting Mode
-        </Button>
-        
-        <Button 
-          variant={mode === 'text-chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
-          onClick={() => handleModeChange('text-chat')}
-        >
-          <MessageSquare className="w-4 h-4" />
-          Chat with Kiaan
-        </Button>
       </div>
     </div>
   );

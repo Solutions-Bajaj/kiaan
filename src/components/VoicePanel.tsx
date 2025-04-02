@@ -77,7 +77,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Main Content Area with a flex-1 to take up all available space */}
+        {/* Main Content Area - flex-1 to take all available space */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Split View Container - with fixed height that doesn't include footer */}
           <div className="flex flex-col md:flex-row h-full overflow-hidden">
@@ -125,7 +125,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer - Now positioned at the bottom with borders */}
-        <div className="mt-auto border-t border-slate-200 p-4">
+        <div className="border-t border-slate-200 p-4">
           {/* The footer is now outside of the flex-1 container, ensuring it stays at the bottom */}
           <div className="flex justify-center space-x-4">
             {/* The mode buttons are now handled directly by SolutionsBajajAI but positioned in this footer */}
