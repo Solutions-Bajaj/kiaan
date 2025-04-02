@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -6,11 +5,14 @@ import { Send, PaperclipIcon, X } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
 
 interface ChatInterfaceProps {
-  webhookUrl: string;
+  webhookUrl?: string;
   onActivityChange?: (hasActivity: boolean) => void;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityChange }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
+  webhookUrl = "https://choco.solutionsbajaj.com/webhook/sberpkiaan", 
+  onActivityChange 
+}) => {
   const [messages, setMessages] = useState<{ role: string; content: string; attachment?: string }[]>([]);
   const [input, setInput] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -59,7 +61,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
       }
 
       const data = await response.json();
-      const botMessage = { role: 'assistant', content: data.response };
+      const botMessage = { role: 'assistant', content: data.response || data.output };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
