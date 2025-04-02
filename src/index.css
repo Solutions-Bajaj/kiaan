@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -257,13 +258,77 @@
   box-shadow: 0 0 5px rgba(220, 245, 255, 0.8);
 }
 
-/* Position particles in circle around sphere */
-@for $i from 1 through 12 {
-  .particle-#{$i} {
-    transform: rotate(#{$i * 30}deg) translateY(-50px);
-    animation: particlePulse 3s ease-in-out infinite;
-    animation-delay: #{$i * 0.25}s;
-  }
+/* Position particles in circle around sphere - individual classes instead of loop */
+.particle-1 {
+  transform: rotate(30deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.25s;
+}
+
+.particle-2 {
+  transform: rotate(60deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.particle-3 {
+  transform: rotate(90deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.75s;
+}
+
+.particle-4 {
+  transform: rotate(120deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.particle-5 {
+  transform: rotate(150deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.25s;
+}
+
+.particle-6 {
+  transform: rotate(180deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.particle-7 {
+  transform: rotate(210deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.75s;
+}
+
+.particle-8 {
+  transform: rotate(240deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.particle-9 {
+  transform: rotate(270deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.25s;
+}
+
+.particle-10 {
+  transform: rotate(300deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+.particle-11 {
+  transform: rotate(330deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.75s;
+}
+
+.particle-12 {
+  transform: rotate(360deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 3s;
 }
 
 @keyframes particlePulse {
