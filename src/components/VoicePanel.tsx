@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -54,20 +53,20 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         ref={panelRef}
         className={cn(
           "fixed z-40 flex flex-col rounded-2xl shadow-xl transition-all duration-500 ease-in-out",
-          "bg-gray-900 backdrop-blur-md border border-gray-800 overflow-hidden",
+          "bg-white/90 backdrop-blur-md border border-slate-200 overflow-hidden",
           "w-[90vw] h-[85vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-800 relative z-40 bg-gray-900/90 backdrop-blur-md">
+        <div className="flex items-center justify-between p-4 border-b border-slate-100 relative z-30">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
-            <h2 className="text-lg font-medium text-white">Kiaan</h2>
+            <h2 className="text-lg font-medium text-slate-700">Kiaan</h2>
           </div>
           <div className="flex items-center">
             <button 
               onClick={handleClose} 
-              className="p-1 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 transition-colors z-40"
+              className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors z-30"
               aria-label="Close Kiaan Voice Assistant"
             >
               <X className="h-5 w-5" />
@@ -77,7 +76,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex flex-col md:flex-row h-full overflow-hidden">
-            <div className="w-full md:w-1/2 border-r border-gray-800 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col relative z-5">
+            <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col relative z-10">
               <AgentAnimation isActive={isAgentActive} messages={terminalMessages} />
             </div>
             
@@ -92,7 +91,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 p-4 relative z-40 bg-gray-900/90 backdrop-blur-md">
+        <div className="border-t border-slate-200 p-4 relative z-30">
           <div className="flex justify-center space-x-4">
             {/* The mode buttons will be handled by SolutionsBajajAI */}
           </div>

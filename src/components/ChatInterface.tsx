@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -74,17 +73,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
   }, [messages, onActivityChange]);
 
   return (
-    <div className="flex flex-col h-full bg-gray-900">
+    <div className="flex flex-col h-full">
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg, index) => (
           <div key={index} className={`text-sm ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <span className={`px-3 py-1 rounded-full inline-block ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-100'}`}>
+            <span className={`px-3 py-1 rounded-full inline-block ${msg.role === 'user' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
               {msg.content}
             </span>
           </div>
         ))}
       </div>
-      <div className="p-4 border-t border-gray-800 relative z-30 bg-gray-900/90 backdrop-blur-md">
+      <div className="p-4 border-t border-gray-200 relative z-20">
         <div className="flex items-center space-x-2">
           <Input
             type="text"
@@ -92,9 +91,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') sendMessage(); }}
-            className="flex-1 bg-gray-800 border-gray-700 text-white"
+            className="flex-1"
           />
-          <Button onClick={sendMessage} className="z-40 bg-blue-500 hover:bg-blue-600"><Send className="w-4 h-4" /></Button>
+          <Button onClick={sendMessage} className="z-20"><Send className="w-4 h-4" /></Button>
         </div>
       </div>
     </div>
