@@ -55,6 +55,7 @@
     --agent-teal: #60a5fa;
     --agent-dark: #1A2C38;
     --agent-light: #E5F9FF;
+    --agent-glow: #4cc2ff;
   }
 
   .dark {
@@ -450,6 +451,39 @@
   animation-delay: 4s;
 }
 
+/* Additional floating objects */
+.floating-object-6 {
+  width: 7px;
+  height: 7px;
+  top: 35%;
+  right: 15%;
+  background: rgba(96, 165, 250, 0.35);
+  animation: floatObject 19s ease-in-out infinite, pulseOpacity 8s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.floating-object-7 {
+  width: 9px;
+  height: 5px;
+  bottom: 40%;
+  left: 22%;
+  border-radius: 30%;
+  background: rgba(96, 165, 250, 0.3);
+  animation: floatObject 21s ease-in-out infinite, pulseOpacity 6s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+.floating-object-8 {
+  width: 5px;
+  height: 5px;
+  top: 22%;
+  right: 25%;
+  border-radius: 2px;
+  background: rgba(96, 165, 250, 0.4);
+  animation: floatObject 17s ease-in-out infinite, pulseOpacity 5s ease-in-out infinite;
+  animation-delay: 3.5s;
+}
+
 /* Orbits with brighter colors matching the blue theme */
 .orbit {
   position: absolute;
@@ -560,7 +594,7 @@
   }
 }
 
-/* TRANSITION ANIMATION */
+/* NEW TRANSITION ANIMATION - Inspired by AutoGPT */
 .agent-transition {
   position: relative;
   width: 200px;
@@ -568,113 +602,189 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transform-style: preserve-3d;
 }
 
-.transition-core {
-  animation: expandCore 2s forwards;
-}
-
-.transition-ring-1 {
-  animation: expandRing 1.5s forwards !important;
-}
-
-.transition-ring-2 {
-  animation: expandRing 1.7s forwards !important;
-}
-
-.transition-ring-3 {
-  animation: expandRing 1.9s forwards !important;
-}
-
-.transition-mask {
+.expanding-circle {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  background: rgba(60, 239, 255, 0.2);
+  width: 60px;
+  height: 60px;
+  background: rgba(30, 64, 85, 0.2);
   border-radius: 50%;
-  z-index: 5;
-  animation: maskToFace 2s forwards;
-  opacity: 0;
+  box-shadow: 0 0 30px rgba(76, 194, 255, 0.4);
+  animation: expandToFace 2s forwards cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.transition-face {
+.face-container {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 C22.4 0 0 22.4 0 50 C0 77.6 22.4 100 50 100 C77.6 100 100 77.6 100 50 C100 22.4 77.6 0 50 0' fill='rgba(60, 239, 255, 0.2)'/%3E%3C/svg%3E");
-  background-size: contain;
+  width: 140px;
+  height: 180px;
   opacity: 0;
-  z-index: 6;
-  animation: faceAppear 2s forwards;
+  animation: fadeInFace 2s forwards;
+  animation-delay: 0.5s;
 }
 
-@keyframes expandCore {
+.face-outline {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 40%;
+  border: 2px solid rgba(76, 194, 255, 0.4);
+  box-shadow: 0 0 15px rgba(76, 194, 255, 0.6), inset 0 0 10px rgba(76, 194, 255, 0.3);
+  background: rgba(30, 64, 85, 0.7);
+}
+
+.forming-eye {
+  position: absolute;
+  width: 0;
+  height: 0;
+  background: #4cc2ff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #4cc2ff;
+  animation: formEyes 1.5s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-delay: 1s;
+}
+
+.forming-eye-left {
+  top: 60px;
+  left: 40px;
+}
+
+.forming-eye-right {
+  top: 60px;
+  right: 40px;
+}
+
+.face-detail {
+  position: absolute;
+  background: rgba(76, 194, 255, 0.3);
+  animation: fadeInDetail 1s forwards;
+  animation-delay: 1.2s;
+  opacity: 0;
+}
+
+.face-detail-1 {
+  width: 40px;
+  height: 10px;
+  border-radius: 5px;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.face-detail-2 {
+  width: 20px;
+  height: 5px;
+  border-radius: 2px;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.circuit-line {
+  position: absolute;
+  background: linear-gradient(90deg, rgba(76, 194, 255, 0) 0%, rgba(76, 194, 255, 0.6) 50%, rgba(76, 194, 255, 0) 100%);
+  height: 1px;
+  opacity: 0;
+  animation: drawLine 1.5s forwards;
+}
+
+.circuit-line-1 {
+  width: 80px;
+  top: 40px;
+  left: 30px;
+  animation-delay: 1.3s;
+}
+
+.circuit-line-2 {
+  width: 60px;
+  top: 90px;
+  right: 25px;
+  animation-delay: 1.4s;
+}
+
+.circuit-line-3 {
+  width: 70px;
+  bottom: 50px;
+  left: 20px;
+  animation-delay: 1.5s;
+}
+
+.circuit-line-4 {
+  width: 50px;
+  bottom: 70px;
+  right: 30px;
+  animation-delay: 1.6s;
+}
+
+@keyframes expandToFace {
   0% {
     width: 60px;
     height: 60px;
   }
-  50% {
+  40% {
     width: 100px;
     height: 100px;
-    background: var(--agent-dark);
+    background: rgba(30, 64, 85, 0.4);
   }
   100% {
     width: 140px;
     height: 180px;
     border-radius: 40%;
-    background: #1d3244;
+    background: rgba(30, 64, 85, 0.7);
   }
 }
 
-@keyframes expandRing {
+@keyframes fadeInFace {
   0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.2);
+    opacity: 0;
   }
   100% {
-    opacity: 0;
-    transform: scale(1.5);
+    opacity: 1;
   }
 }
 
-@keyframes maskToFace {
+@keyframes formEyes {
   0% {
-    width: 40px;
-    height: 40px;
+    width: 0;
+    height: 0;
     opacity: 0;
   }
   50% {
-    width: 100px;
-    height: 100px;
+    width: 15px;
+    height: 15px;
     opacity: 0.5;
   }
   100% {
-    width: 120px;
-    height: 150px;
-    border-radius: 40%;
-    opacity: 0.8;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
   }
 }
 
-@keyframes faceAppear {
-  0%, 60% {
+@keyframes fadeInDetail {
+  0% {
     opacity: 0;
-    transform: scale(0);
-  }
-  80% {
-    opacity: 0.3;
-    transform: scale(0.8);
+    transform: translateX(-50%) scaleX(0.5);
   }
   100% {
-    opacity: 0.8;
-    transform: scale(1);
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
   }
 }
 
-/* ACTIVE STATE ANIMATION */
+@keyframes drawLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* NEW ACTIVE STATE ANIMATION - AutoGPT Inspired */
 .agent-active {
   position: relative;
   width: 200px;
@@ -684,131 +794,172 @@
   justify-content: center;
 }
 
-.agent-face {
+.ai-face {
   width: 140px;
   height: 180px;
-  background: #1d3244;
+  background: rgba(30, 64, 85, 0.9);
   border-radius: 40%;
   position: relative;
+  box-shadow: 0 0 30px rgba(76, 194, 255, 0.4);
   z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 30px rgba(60, 239, 255, 0.3);
   overflow: hidden;
 }
 
-.agent-face::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='140' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cmask id='faceMask'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Cellipse cx='70' cy='60' rx='25' ry='15' fill='black'/%3E%3Cellipse cx='70' cy='110' rx='15' ry='10' fill='black'/%3E%3C/mask%3E%3Crect width='100%25' height='100%25' fill='rgba(60, 239, 255, 0.05)' mask='url(%23faceMask)'/%3E%3Cpath d='M40,60 L50,70 L60,60 M80,60 L90,70 L100,60' stroke='rgba(60, 239, 255, 0.4)' fill='none'/%3E%3Cpath d='M65,105 L75,105' stroke='rgba(60, 239, 255, 0.4)' fill='none'/%3E%3C/svg%3E");
-  opacity: 0.8;
-  animation: faceFlicker 5s ease-in-out infinite;
-}
-
-.circuit-paths {
+.ai-face-inner {
   position: absolute;
   inset: 0;
-  z-index: 4;
-  opacity: 0.6;
-  animation: circuitPulse 4s ease-in-out infinite;
-  background-image: url("data:image/svg+xml,%3Csvg width='140' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30,30 L50,50 M90,30 L70,50 M40,120 L60,100 M100,120 L80,100 M70,30 L70,50 M70,150 L70,130' stroke='rgba(60, 239, 255, 0.3)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  border-radius: 40%;
+  background: linear-gradient(135deg, rgba(30, 64, 85, 0.7) 0%, rgba(26, 44, 56, 0.95) 100%);
+  box-shadow: inset 0 0 20px rgba(76, 194, 255, 0.2);
+  animation: faceBackgroundPulse 8s ease-in-out infinite;
 }
 
-.glow-eyes {
+.ai-eye {
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background: var(--agent-teal);
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--agent-teal), 0 0 20px var(--agent-teal);
-  z-index: 5;
-  animation: eyeGlow 3s ease-in-out infinite;
+  background: #4cc2ff;
+  box-shadow: 0 0 15px #4cc2ff;
+  animation: eyePulse 3s infinite alternate;
 }
 
-.glow-eyes.left {
+.ai-eye-left {
   top: 60px;
-  left: 50px;
-}
-
-.glow-eyes.right {
-  top: 60px;
-  right: 50px;
-}
-
-.active-data-points {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-}
-
-.active-data-points::before,
-.active-data-points::after {
-  content: "";
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: var(--agent-teal);
-  border-radius: 50%;
-  box-shadow: 0 0 3px var(--agent-teal);
-  animation: activeDots 2s ease-in-out infinite;
-}
-
-.active-data-points::before {
-  top: 40%;
-  left: 30%;
+  left: 40px;
   animation-delay: 0.5s;
 }
 
-.active-data-points::after {
-  bottom: 30%;
-  right: 35%;
+.ai-eye-right {
+  top: 60px;
+  right: 40px;
+}
+
+.ai-circuit {
+  position: absolute;
+  background: linear-gradient(90deg, rgba(76, 194, 255, 0) 0%, rgba(76, 194, 255, 0.5) 50%, rgba(76, 194, 255, 0) 100%);
+  height: 1px;
+  animation: circuitPulse 4s infinite alternate;
+}
+
+.ai-circuit-1 {
+  width: 80px;
+  top: 40px;
+  left: 30px;
+  animation-delay: 0.2s;
+}
+
+.ai-circuit-2 {
+  width: 60px;
+  top: 90px;
+  right: 25px;
+  animation-delay: 0.4s;
+}
+
+.ai-circuit-3 {
+  width: 70px;
+  bottom: 50px;
+  left: 20px;
+  animation-delay: 0.6s;
+}
+
+.ai-circuit-4 {
+  width: 50px;
+  bottom: 70px;
+  right: 30px;
+  animation-delay: 0.8s;
+}
+
+.ai-circuit-5 {
+  width: 100px;
+  height: 1px;
+  top: 120px;
+  left: 20px;
   animation-delay: 1s;
 }
 
-@keyframes faceFlicker {
+.ai-circuit-6 {
+  width: 40px;
+  height: 1px;
+  top: 30px;
+  left: 50px;
+  animation-delay: 1.2s;
+}
+
+.data-pulse {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #4cc2ff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #4cc2ff;
+  opacity: 0;
+  animation: dataPulseMove 3s infinite;
+}
+
+.data-pulse-1 {
+  top: 60px;
+  left: 30px;
+  animation-delay: 0.5s;
+}
+
+.data-pulse-2 {
+  bottom: 80px;
+  right: 40px;
+  animation-delay: 1s;
+}
+
+.data-pulse-3 {
+  top: 100px;
+  right: 50px;
+  animation-delay: 1.5s;
+}
+
+@keyframes eyePulse {
   0%, 100% {
     opacity: 0.8;
+    box-shadow: 0 0 15px #4cc2ff;
   }
   50% {
     opacity: 1;
+    box-shadow: 0 0 25px #4cc2ff;
   }
-  25%, 75% {
-    opacity: 0.9;
+}
+
+@keyframes faceBackgroundPulse {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
 @keyframes circuitPulse {
-  0%, 100% {
-    opacity: 0.6;
+  0% {
+    opacity: 0.3;
+    box-shadow: 0 0 2px rgba(76, 194, 255, 0.3);
   }
-  50% {
+  100% {
     opacity: 0.8;
+    box-shadow: 0 0 5px rgba(76, 194, 255, 0.6);
   }
 }
 
-@keyframes eyeGlow {
-  0%, 100% {
-    opacity: 0.8;
-    box-shadow: 0 0 10px var(--agent-teal), 0 0 20px var(--agent-teal);
+@keyframes dataPulseMove {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
   }
-  50% {
+  10% {
     opacity: 1;
-    box-shadow: 0 0 15px var(--agent-teal), 0 0 30px var(--agent-teal);
   }
-}
-
-@keyframes activeDots {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
+  90% {
     opacity: 1;
-    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(30px);
   }
 }
 
@@ -826,3 +977,4 @@
   box-sizing: border-box;
   z-index: 1000;
 }
+

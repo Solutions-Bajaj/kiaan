@@ -40,6 +40,9 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
               <div className="floating-object floating-object-3"></div>
               <div className="floating-object floating-object-4"></div>
               <div className="floating-object floating-object-5"></div>
+              <div className="floating-object floating-object-6"></div>
+              <div className="floating-object floating-object-7"></div>
+              <div className="floating-object floating-object-8"></div>
               
               {/* New sphere animation with lighter colors */}
               <div className="sphere-container">
@@ -65,22 +68,38 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           
           {animationState === 'transitioning' && (
             <div className="agent-transition">
-              <div className="agent-core transition-core"></div>
-              <div className="ring ring-1 transition-ring-1"></div>
-              <div className="ring ring-2 transition-ring-2"></div>
-              <div className="ring ring-3 transition-ring-3"></div>
-              <div className="transition-mask"></div>
-              <div className="transition-face"></div>
+              <div className="expanding-circle"></div>
+              <div className="face-container">
+                <div className="face-outline"></div>
+                <div className="face-detail face-detail-1"></div>
+                <div className="face-detail face-detail-2"></div>
+                <div className="forming-eye forming-eye-left"></div>
+                <div className="forming-eye forming-eye-right"></div>
+                <div className="circuit-line circuit-line-1"></div>
+                <div className="circuit-line circuit-line-2"></div>
+                <div className="circuit-line circuit-line-3"></div>
+                <div className="circuit-line circuit-line-4"></div>
+              </div>
             </div>
           )}
           
           {animationState === 'active' && (
             <div className="agent-active">
-              <div className="agent-face"></div>
-              <div className="circuit-paths"></div>
-              <div className="data-points active-data-points"></div>
-              <div className="glow-eyes left"></div>
-              <div className="glow-eyes right"></div>
+              <div className="ai-face">
+                <div className="ai-face-inner">
+                  <div className="ai-eye ai-eye-left"></div>
+                  <div className="ai-eye ai-eye-right"></div>
+                  <div className="ai-circuit ai-circuit-1"></div>
+                  <div className="ai-circuit ai-circuit-2"></div>
+                  <div className="ai-circuit ai-circuit-3"></div>
+                  <div className="ai-circuit ai-circuit-4"></div>
+                  <div className="ai-circuit ai-circuit-5"></div>
+                  <div className="ai-circuit ai-circuit-6"></div>
+                  <div className="data-pulse data-pulse-1"></div>
+                  <div className="data-pulse data-pulse-2"></div>
+                  <div className="data-pulse data-pulse-3"></div>
+                </div>
+              </div>
             </div>
           )}
         </div>
