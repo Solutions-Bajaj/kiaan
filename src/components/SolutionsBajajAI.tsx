@@ -250,8 +250,8 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
         {renderMainContent()}
       </div>
       
-      {/* Mode buttons now in a fixed position at the bottom of the container */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-center space-x-4">
+      {/* Mode buttons moved to the parent footer */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center space-x-4 bg-white/50 backdrop-blur-sm border-t border-slate-200 z-20">
         <Button 
           variant={mode === 'chat' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}

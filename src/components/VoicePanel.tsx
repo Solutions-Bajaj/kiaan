@@ -77,53 +77,59 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Main Content Area - Split into two columns */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-          {/* Left Column - Agent Terminal with transparent background */}
-          <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
-              <div className="flex items-center gap-2">
-                <Terminal size={14} />
-                <span>Agent Terminal</span>
-              </div>
-              <div className="flex gap-1">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              </div>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-              {terminalMessages.map((msg, index) => (
-                <div key={index} className="mb-1 opacity-80">
-                  <span className="text-blue-400 mr-2">&gt;</span>
-                  <span>{msg}</span>
+        {/* Main Content Area with a flex-1 to take up all available space */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Split View Container - with fixed height that doesn't include footer */}
+          <div className="flex flex-col md:flex-row h-full overflow-hidden">
+            {/* Left Column - Agent Terminal with transparent background */}
+            <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
+                <div className="flex items-center gap-2">
+                  <Terminal size={14} />
+                  <span>Agent Terminal</span>
                 </div>
-              ))}
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                </div>
+              </div>
               
-              <div className="flex items-center mt-3 text-slate-400">
-                <ChevronsRight size={14} className="mr-1" />
-                <span className="animate-pulse">_</span>
+              <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                {terminalMessages.map((msg, index) => (
+                  <div key={index} className="mb-1 opacity-80">
+                    <span className="text-blue-400 mr-2">&gt;</span>
+                    <span>{msg}</span>
+                  </div>
+                ))}
+                
+                <div className="flex items-center mt-3 text-slate-400">
+                  <ChevronsRight size={14} className="mr-1" />
+                  <span className="animate-pulse">_</span>
+                </div>
+              </div>
+              
+              <div className="mt-2 border-t border-slate-700 pt-2 text-xs text-slate-400">
+                <div className="flex items-center gap-2">
+                  <Code size={12} />
+                  <span>System: Kiaan AI v2.4.1</span>
+                </div>
               </div>
             </div>
             
-            <div className="mt-2 border-t border-slate-700 pt-2 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <Code size={12} />
-                <span>System: Kiaan AI v2.4.1</span>
-              </div>
+            {/* Right Column - Voice Assistant Content */}
+            <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden">
+              {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
             </div>
-          </div>
-          
-          {/* Right Column - Voice Assistant Content */}
-          <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden">
-            {isOpen && <SolutionsBajajAI agentId="S4i7eNeg211h4p6hHRXK" />}
           </div>
         </div>
 
-        {/* Footer with mode buttons centered */}
-        <div className="p-4 border-t border-slate-100 flex justify-center">
-          {/* The mode buttons are now handled directly by SolutionsBajajAI and positioned at the bottom of the panel */}
+        {/* Footer - Now positioned at the bottom with borders */}
+        <div className="mt-auto border-t border-slate-200 p-4">
+          {/* The footer is now outside of the flex-1 container, ensuring it stays at the bottom */}
+          <div className="flex justify-center space-x-4">
+            {/* The mode buttons are now handled directly by SolutionsBajajAI but positioned in this footer */}
+          </div>
         </div>
       </div>
     </>
