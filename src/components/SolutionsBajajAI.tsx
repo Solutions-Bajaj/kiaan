@@ -240,6 +240,40 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
     );
   };
 
+  // Render the mode buttons
+  const renderModeButtons = () => {
+    return (
+      <div className="flex justify-center space-x-4">
+        <Button 
+          variant={mode === 'chat' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('chat')}
+        >
+          <MessageCircle className="w-4 h-4" />
+          Talk with Kiaan
+        </Button>
+        
+        <Button 
+          variant={mode === 'meeting' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('meeting')}
+        >
+          <Users className="w-4 h-4" />
+          Meeting Mode
+        </Button>
+        
+        <Button 
+          variant={mode === 'text-chat' ? 'default' : 'outline'} 
+          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          onClick={() => handleModeChange('text-chat')}
+        >
+          <MessageSquare className="w-4 h-4" />
+          Chat with Kiaan
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-between relative p-4">
       {/* Voice animations */}
@@ -249,6 +283,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
       <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
         {renderMainContent()}
       </div>
+      
+      {/* Moved the buttons back to this component */}
+      {renderModeButtons()}
     </div>
   );
 };

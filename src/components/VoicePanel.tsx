@@ -128,7 +128,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         <div className="border-t border-slate-200 p-4">
           {/* The footer is now outside of the flex-1 container, ensuring it stays at the bottom */}
           <div className="flex justify-center space-x-4">
-            {/* The mode buttons are now handled directly by SolutionsBajajAI but positioned in this footer */}
+            {/* The mode buttons will be handled by SolutionsBajajAI */}
           </div>
         </div>
       </div>
