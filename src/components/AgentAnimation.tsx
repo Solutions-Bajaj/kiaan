@@ -14,7 +14,7 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
       setAnimationState('transitioning');
       const timer = setTimeout(() => {
         setAnimationState('active');
-      }, 2000); // Transition takes 2 seconds
+      }, 1000); // Reduced transition time for a more subtle effect
       return () => clearTimeout(timer);
     } else {
       setAnimationState('idle');
@@ -68,16 +68,7 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           
           {animationState === 'transitioning' && (
             <div className="agent-transition">
-              <div className="expanding-circle"></div>
-              <div className="circuit-container">
-                <div className="circuit-line circuit-line-1"></div>
-                <div className="circuit-line circuit-line-2"></div>
-                <div className="circuit-line circuit-line-3"></div>
-                <div className="circuit-line circuit-line-4"></div>
-                <div className="circuit-dot circuit-dot-1"></div>
-                <div className="circuit-dot circuit-dot-2"></div>
-                <div className="circuit-dot circuit-dot-3"></div>
-              </div>
+              <div className="fade-transition"></div>
             </div>
           )}
           

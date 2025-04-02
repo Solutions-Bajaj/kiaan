@@ -183,6 +183,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.5s ease-in;
 }
 
 /* Sphere container */
@@ -593,7 +594,7 @@
   }
 }
 
-/* UPDATED TRANSITION ANIMATION - Simplified */
+/* NEW SUBTLE TRANSITION ANIMATION */
 .agent-transition {
   position: relative;
   width: 200px;
@@ -601,142 +602,51 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-style: preserve-3d;
 }
 
-.expanding-circle {
+.fade-transition {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  background: rgba(30, 64, 85, 0.2);
-  border-radius: 50%;
-  box-shadow: 0 0 30px rgba(76, 194, 255, 0.4);
-  animation: expandToSiri 2s forwards cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.circuit-container {
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  opacity: 0;
-  animation: fadeInCircuit 1.5s forwards;
-  animation-delay: 0.5s;
-}
-
-.circuit-line {
-  position: absolute;
-  background: linear-gradient(90deg, rgba(76, 194, 255, 0) 0%, rgba(76, 194, 255, 0.6) 50%, rgba(76, 194, 255, 0) 100%);
-  height: 1px;
-  opacity: 0;
-  animation: drawLine 1.5s forwards;
-}
-
-.circuit-line-1 {
-  width: 80px;
-  top: 40px;
-  left: 30px;
-  animation-delay: 0.8s;
-}
-
-.circuit-line-2 {
-  width: 60px;
-  top: 70px;
-  right: 25px;
-  animation-delay: 1s;
-}
-
-.circuit-line-3 {
-  width: 70px;
-  bottom: 50px;
-  left: 20px;
-  animation-delay: 1.2s;
-}
-
-.circuit-line-4 {
-  width: 50px;
-  bottom: 70px;
-  right: 30px;
-  animation-delay: 1.4s;
-}
-
-.circuit-dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: rgba(76, 194, 255, 0.8);
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.3) 0%, transparent 70%);
   border-radius: 50%;
   opacity: 0;
-  animation: fadeInDot 0.5s forwards;
+  animation: fadeTransition 1s forwards, pulseGlow 2s infinite alternate;
 }
 
-.circuit-dot-1 {
-  top: 40px;
-  left: 110px;
-  animation-delay: 1.3s;
-}
-
-.circuit-dot-2 {
-  top: 70px;
-  right: 25px;
-  animation-delay: 1.4s;
-}
-
-.circuit-dot-3 {
-  bottom: 50px;
-  left: 20px;
-  animation-delay: 1.5s;
-}
-
-@keyframes expandToSiri {
-  0% {
-    width: 60px;
-    height: 60px;
-  }
-  40% {
-    width: 100px;
-    height: 100px;
-    background: rgba(30, 64, 85, 0.4);
-  }
-  100% {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: rgba(30, 64, 85, 0.2);
-  }
-}
-
-@keyframes fadeInCircuit {
+@keyframes fadeTransition {
   0% {
     opacity: 0;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.8;
   }
   100% {
-    opacity: 1;
-  }
-}
-
-@keyframes drawLine {
-  0% {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes fadeInDot {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
+    opacity: 0.6;
     transform: scale(1);
   }
 }
 
-/* NEW SIRI-LIKE WAVE ANIMATION - Active State */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(96, 165, 250, 0.5);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* SIRI-LIKE WAVE ANIMATION - Active State */
 .agent-active {
   position: relative;
   width: 200px;
@@ -744,6 +654,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.5s ease-in;
 }
 
 .siri-container {
