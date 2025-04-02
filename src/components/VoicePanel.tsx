@@ -50,7 +50,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
       {/* Full-screen overlay to prevent clicks on background */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-30 bg-black/80 backdrop-blur-sm"
           onClick={(e) => e.stopPropagation()} // Prevent clicks from propagating
         />
       )}
@@ -59,22 +59,22 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         ref={panelRef}
         className={cn(
           "fixed z-40 flex flex-col rounded-2xl shadow-xl transition-all duration-500 ease-in-out",
-          "bg-white/90 backdrop-blur-md border border-slate-200 overflow-hidden",
+          "bg-gray-900/95 backdrop-blur-md border border-gray-800 overflow-hidden",
           // Always use fullscreen dimensions
           "w-[90vw] h-[85vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-100">
+        <div className="flex items-center justify-between p-4 border-b border-gray-800">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
-            <h2 className="text-lg font-medium text-slate-700">Kiaan</h2>
+            <h2 className="text-lg font-medium text-gray-200">Kiaan</h2>
           </div>
           <div className="flex items-center">
             <button 
               onClick={handleClose} 
-              className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              className="p-1 rounded-full text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition-colors"
               aria-label="Close Kiaan Voice Assistant"
             >
               <X className="h-5 w-5" />
@@ -87,12 +87,12 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           {/* Split View Container - with fixed height that doesn't include footer */}
           <div className="flex flex-col md:flex-row h-full overflow-hidden">
             {/* Left Column - Agent Terminal with transparent background */}
-            <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
+            <div className="w-full md:w-1/2 border-r border-gray-800 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
               <AgentAnimation isActive={isAgentActive} messages={terminalMessages} />
             </div>
             
             {/* Right Column - Voice Assistant Content */}
-            <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden">
+            <div className="w-full md:w-1/2 flex items-center justify-center overflow-hidden bg-gray-900">
               {isOpen && (
                 <SolutionsBajajAI 
                   agentId="S4i7eNeg211h4p6hHRXK" 
@@ -104,7 +104,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer - Now positioned at the bottom with borders */}
-        <div className="border-t border-slate-200 p-4">
+        <div className="border-t border-gray-800 p-4 bg-gray-900">
           {/* The footer is now outside of the flex-1 container, ensuring it stays at the bottom */}
           <div className="flex justify-center space-x-4">
             {/* The mode buttons will be handled by SolutionsBajajAI */}
