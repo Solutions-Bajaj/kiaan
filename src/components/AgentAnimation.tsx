@@ -24,21 +24,30 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex-1 relative overflow-hidden">
-        {/* Matrix-style code rain background */}
-        <div className="absolute inset-0 matrix-rain opacity-30"></div>
+        {/* Matrix-style code rain background with lighter opacity */}
+        <div className="absolute inset-0 matrix-rain opacity-20"></div>
         
-        {/* Grid overlay */}
+        {/* Grid overlay with lighter colors */}
         <div className="absolute inset-0 grid-overlay"></div>
         
         {/* Agent visualization container */}
         <div className="absolute inset-0 flex items-center justify-center">
           {animationState === 'idle' && (
             <div className="agent-idle">
-              <div className="agent-core"></div>
-              <div className="ring ring-1"></div>
-              <div className="ring ring-2"></div>
-              <div className="ring ring-3"></div>
-              <div className="data-points"></div>
+              {/* New sphere animation with lighter colors */}
+              <div className="sphere-container">
+                <div className="sphere-outer"></div>
+                <div className="sphere-middle"></div>
+                <div className="sphere-inner"></div>
+                <div className="particle-container">
+                  {[...Array(12)].map((_, i) => (
+                    <div key={i} className={`particle particle-${i + 1}`}></div>
+                  ))}
+                </div>
+              </div>
+              <div className="orbit orbit-1"></div>
+              <div className="orbit orbit-2"></div>
+              <div className="orbit orbit-3"></div>
             </div>
           )}
           
