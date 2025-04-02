@@ -23,6 +23,12 @@
   `;
   container.appendChild(orb);
 
+  // Create overlay for when panel is open
+  const overlay = document.createElement('div');
+  overlay.id = 'kiaan-overlay';
+  overlay.className = 'kiaan-overlay';
+  container.appendChild(overlay);
+
   // Create panel
   const panel = document.createElement('div');
   panel.id = 'kiaan-panel';
@@ -34,20 +40,6 @@
         <h2>Kiaan</h2>
       </div>
       <div class="flex items-center">
-        <button class="kiaan-fullscreen-btn" aria-label="Toggle fullscreen">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="maximize-icon">
-            <path d="m15 3 6 6m0-6-6 6"></path>
-            <path d="M9 21 3 15m0 6 6-6"></path>
-            <path d="M21 3h-6m6 0v6"></path>
-            <path d="M3 21h6m-6 0v-6"></path>
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="minimize-icon" style="display: none;">
-            <path d="m4 14 6-6m0 0-6 6"></path>
-            <path d="m20 10-6 6m0 0 6-6"></path>
-            <path d="M14 4h6v6"></path>
-            <path d="M10 20H4v-6"></path>
-          </svg>
-        </button>
         <button class="kiaan-close-btn" aria-label="Close Kiaan Voice Assistant">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
             <path d="M18 6 6 18"></path>
@@ -172,16 +164,32 @@
         }
       }
       
+      .kiaan-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9997;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      
+      .kiaan-overlay.visible {
+        opacity: 1;
+        pointer-events: all;
+      }
+      
       .kiaan-panel {
         position: fixed;
-        bottom: 2rem;
-        right: 2rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.95);
         z-index: 9998;
         display: flex;
         flex-direction: column;
-        width: 380px;
-        height: 600px;
-        max-height: 80vh;
+        width: 80vw;
+        height: 80vh;
         border-radius: 1rem;
         background-color: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(12px);
@@ -189,13 +197,12 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         transition: all 0.5s ease;
-        transform: translateY(20px);
         opacity: 0;
         pointer-events: none;
       }
       
       .kiaan-panel.open {
-        transform: translateY(0);
+        transform: translate(-50%, -50%) scale(1);
         opacity: 1;
         pointer-events: all;
       }
@@ -321,16 +328,8 @@
       /* Responsive adjustments */
       @media (max-width: 640px) {
         .kiaan-panel {
-          width: calc(100% - 2rem);
-          right: 1rem;
-          left: 1rem;
-          bottom: 1rem;
-          height: 500px;
-        }
-        
-        .kiaan-orb {
-          right: 1rem;
-          bottom: 1rem;
+          width: 95vw;
+          height: 95vh;
         }
       }
     `;
@@ -343,7 +342,6 @@
     
     // Toggle panel visibility
     let isOpen = false;
-    let isFullscreen = false;
     let isDragging = false;
     
     // Set initial position (bottom right)
@@ -469,6 +467,8 @@
         isOpen = true;
         panel.classList.add('open');
         orb.classList.add('hidden');
+        overlay.classList.add('visible');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
         createAIWidget();
       }
     });
@@ -479,36 +479,14 @@
         isOpen = false;
         panel.classList.remove('open');
         orb.classList.remove('hidden');
+        overlay.classList.remove('visible');
+        document.body.style.overflow = ''; // Allow scrolling again
       });
     }
     
-    const fullscreenBtn = panel.querySelector('.kiaan-fullscreen-btn');
-    if (fullscreenBtn) {
-      const maximizeIcon = fullscreenBtn.querySelector('.maximize-icon');
-      const minimizeIcon = fullscreenBtn.querySelector('.minimize-icon');
-      
-      fullscreenBtn.addEventListener('click', () => {
-        isFullscreen = !isFullscreen;
-        
-        if (isFullscreen) {
-          panel.classList.add('fullscreen');
-          maximizeIcon.style.display = 'none';
-          minimizeIcon.style.display = 'block';
-        } else {
-          panel.classList.remove('fullscreen');
-          maximizeIcon.style.display = 'block';
-          minimizeIcon.style.display = 'none';
-        }
-      });
-    }
-    
-    // Close panel when clicking outside
-    document.addEventListener('mousedown', (e) => {
-      if (isOpen && !panel.contains(e.target) && e.target !== orb) {
-        isOpen = false;
-        panel.classList.remove('open');
-        orb.classList.remove('hidden');
-      }
+    // Prevent closing panel when clicking outside - only close with X button
+    overlay.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent clicks from propagating through
     });
     
     // Update panel position when window is resized
