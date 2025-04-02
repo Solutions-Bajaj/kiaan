@@ -193,14 +193,14 @@
   z-index: 3;
 }
 
-/* Spheres with light colors */
+/* Spheres with yellowish-blue colors for better visibility */
 .sphere-outer {
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(180, 230, 255, 0.1);
-  box-shadow: 0 0 20px rgba(180, 230, 255, 0.3);
+  background: rgba(200, 240, 180, 0.2);
+  box-shadow: 0 0 30px rgba(170, 230, 255, 0.5);
   animation: pulseSphere 6s ease-in-out infinite;
 }
 
@@ -211,8 +211,8 @@
   width: 70%;
   height: 70%;
   border-radius: 50%;
-  background: rgba(200, 240, 255, 0.15);
-  box-shadow: 0 0 15px rgba(200, 240, 255, 0.4);
+  background: rgba(210, 245, 200, 0.25);
+  box-shadow: 0 0 25px rgba(180, 235, 255, 0.6);
   animation: pulseSphere 6s ease-in-out infinite;
   animation-delay: 0.5s;
 }
@@ -224,8 +224,8 @@
   width: 40%;
   height: 40%;
   border-radius: 50%;
-  background: rgba(220, 245, 255, 0.2);
-  box-shadow: 0 0 10px rgba(220, 245, 255, 0.5);
+  background: rgba(220, 250, 220, 0.35);
+  box-shadow: 0 0 20px rgba(190, 240, 255, 0.8);
   animation: pulseSphere 6s ease-in-out infinite;
   animation-delay: 1s;
 }
@@ -241,7 +241,7 @@
   }
 }
 
-/* Particles around sphere */
+/* Particles around sphere - brighter */
 .particle-container {
   position: absolute;
   width: 100%;
@@ -251,11 +251,11 @@
 
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(220, 245, 255, 0.6);
+  width: 5px;
+  height: 5px;
+  background: rgba(220, 250, 255, 0.9);
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(220, 245, 255, 0.8);
+  box-shadow: 0 0 8px rgba(190, 240, 180, 1);
 }
 
 /* Position particles in circle around sphere - individual classes instead of loop */
@@ -333,7 +333,7 @@
 
 @keyframes particlePulse {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.5;
     transform: rotate(0) translateY(-50px) scale(0.8);
   }
   50% {
@@ -342,11 +342,11 @@
   }
 }
 
-/* Orbits with light colors */
+/* Orbits with brighter colors */
 .orbit {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(180, 230, 255, 0.2);
+  border: 1.5px solid rgba(190, 235, 210, 0.4);
   animation: orbitPulse 4s ease-in-out infinite;
 }
 
@@ -371,11 +371,11 @@
 @keyframes orbitPulse {
   0%, 100% {
     transform: scale(1);
-    opacity: 0.2;
+    opacity: 0.3;
   }
   50% {
     transform: scale(1.05);
-    opacity: 0.4;
+    opacity: 0.6;
   }
 }
 
