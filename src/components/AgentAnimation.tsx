@@ -85,20 +85,19 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           
           {animationState === 'active' && (
             <div className="agent-active">
-              <div className="ai-face">
-                <div className="ai-face-inner">
-                  <div className="ai-eye ai-eye-left"></div>
-                  <div className="ai-eye ai-eye-right"></div>
-                  <div className="ai-circuit ai-circuit-1"></div>
-                  <div className="ai-circuit ai-circuit-2"></div>
-                  <div className="ai-circuit ai-circuit-3"></div>
-                  <div className="ai-circuit ai-circuit-4"></div>
-                  <div className="ai-circuit ai-circuit-5"></div>
-                  <div className="ai-circuit ai-circuit-6"></div>
-                  <div className="data-pulse data-pulse-1"></div>
-                  <div className="data-pulse data-pulse-2"></div>
-                  <div className="data-pulse data-pulse-3"></div>
+              <div className="human-face">
+                <div className="human-face-outline"></div>
+                <div className="human-features">
+                  <div className="human-eyes">
+                    <div className="human-eye human-eye-left"></div>
+                    <div className="human-eye human-eye-right"></div>
+                  </div>
+                  <div className="human-nose"></div>
+                  <div className="human-mouth"></div>
                 </div>
+                <div className="human-hair"></div>
+                <div className="human-glow"></div>
+                <div className="human-aura"></div>
               </div>
             </div>
           )}
