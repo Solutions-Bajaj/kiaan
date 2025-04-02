@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -12,13 +13,16 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
   const [isDragging, setIsDragging] = useState(false);
   const orbRef = useRef<HTMLButtonElement>(null);
 
+  // Don't run any animations or effects if the panel is open
   useEffect(() => {
+    if (isOpen) return;
+    
     const interval = setInterval(() => {
       setIsPulsing(prev => !prev);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     const defaultX = window.innerWidth - 80;
@@ -102,6 +106,11 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
     }
   };
 
+  // If panel is open, don't render the orb at all
+  if (isOpen) {
+    return null;
+  }
+
   return (
     <button
       ref={orbRef}
@@ -113,7 +122,6 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
         "bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600",
         "border-2 border-white/10 backdrop-blur-sm",
         "cursor-grab active:cursor-grabbing",
-        isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100",
         isDragging ? "transition-none" : "",
         isPulsing ? "animate-pulse" : ""
       )}
