@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -240,7 +241,7 @@
   }
 }
 
-/* Particles around sphere - brighter blue */
+/* Particles around sphere - increased from 12 to 20 particles */
 .particle-container {
   position: absolute;
   width: 100%;
@@ -257,74 +258,122 @@
   box-shadow: 0 0 8px rgba(96, 165, 250, 1);
 }
 
-/* Position particles classes */
+/* Position particles classes - now with 20 particles */
 .particle-1 {
-  transform: rotate(30deg) translateY(-50px);
+  transform: rotate(18deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 0.25s;
+  animation-delay: 0.15s;
 }
 
 .particle-2 {
-  transform: rotate(60deg) translateY(-50px);
+  transform: rotate(36deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 0.5s;
+  animation-delay: 0.3s;
 }
 
 .particle-3 {
+  transform: rotate(54deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.45s;
+}
+
+.particle-4 {
+  transform: rotate(72deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+.particle-5 {
   transform: rotate(90deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
   animation-delay: 0.75s;
 }
 
-.particle-4 {
-  transform: rotate(120deg) translateY(-50px);
-  animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 1s;
-}
-
-.particle-5 {
-  transform: rotate(150deg) translateY(-50px);
-  animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 1.25s;
-}
-
 .particle-6 {
+  transform: rotate(108deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 0.9s;
+}
+
+.particle-7 {
+  transform: rotate(126deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.05s;
+}
+
+.particle-8 {
+  transform: rotate(144deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.particle-9 {
+  transform: rotate(162deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.35s;
+}
+
+.particle-10 {
   transform: rotate(180deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
   animation-delay: 1.5s;
 }
 
-.particle-7 {
-  transform: rotate(210deg) translateY(-50px);
+.particle-11 {
+  transform: rotate(198deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 1.75s;
+  animation-delay: 1.65s;
 }
 
-.particle-8 {
-  transform: rotate(240deg) translateY(-50px);
+.particle-12 {
+  transform: rotate(216deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 2s;
+  animation-delay: 1.8s;
 }
 
-.particle-9 {
+.particle-13 {
+  transform: rotate(234deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 1.95s;
+}
+
+.particle-14 {
+  transform: rotate(252deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.1s;
+}
+
+.particle-15 {
   transform: rotate(270deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
   animation-delay: 2.25s;
 }
 
-.particle-10 {
-  transform: rotate(300deg) translateY(-50px);
+.particle-16 {
+  transform: rotate(288deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 2.5s;
+  animation-delay: 2.4s;
 }
 
-.particle-11 {
-  transform: rotate(330deg) translateY(-50px);
+.particle-17 {
+  transform: rotate(306deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
-  animation-delay: 2.75s;
+  animation-delay: 2.55s;
 }
 
-.particle-12 {
+.particle-18 {
+  transform: rotate(324deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.7s;
+}
+
+.particle-19 {
+  transform: rotate(342deg) translateY(-50px);
+  animation: particlePulse 3s ease-in-out infinite;
+  animation-delay: 2.85s;
+}
+
+.particle-20 {
   transform: rotate(360deg) translateY(-50px);
   animation: particlePulse 3s ease-in-out infinite;
   animation-delay: 3s;
@@ -339,6 +388,66 @@
     opacity: 1;
     transform: rotate(0) translateY(-50px) scale(1.2);
   }
+}
+
+/* Added floating objects of different shapes and sizes */
+.floating-object {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.4);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.6);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-object-1 {
+  width: 8px;
+  height: 8px;
+  top: 25%;
+  left: 15%;
+  animation: floatObject 15s ease-in-out infinite, pulseOpacity 6s ease-in-out infinite;
+}
+
+.floating-object-2 {
+  width: 12px;
+  height: 6px;
+  top: 65%;
+  right: 20%;
+  border-radius: 40%;
+  animation: floatObject 18s ease-in-out infinite, pulseOpacity 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.floating-object-3 {
+  width: 6px;
+  height: 10px;
+  bottom: 20%;
+  left: 30%;
+  border-radius: 40%;
+  animation: floatObject 20s ease-in-out infinite, pulseOpacity 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.floating-object-4 {
+  width: 4px;
+  height: 12px;
+  top: 40%;
+  right: 30%;
+  transform: rotate(45deg);
+  background: rgba(96, 165, 250, 0.3);
+  animation: floatObject 25s ease-in-out infinite, pulseOpacity 9s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.floating-object-5 {
+  width: 10px;
+  height: 4px;
+  bottom: 30%;
+  right: 40%;
+  transform: rotate(-30deg);
+  background: rgba(96, 165, 250, 0.25);
+  animation: floatObject 22s ease-in-out infinite, pulseOpacity 7s ease-in-out infinite;
+  animation-delay: 4s;
 }
 
 /* Orbits with brighter colors matching the blue theme */
@@ -365,6 +474,70 @@
   width: 200px;
   height: 200px;
   animation-delay: 1s;
+}
+
+/* Adding additional orbit with some traveling objects */
+.orbit-4 {
+  width: 240px;
+  height: 240px; 
+  animation-delay: 1.5s;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.traveling-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #60a5fa;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.8);
+}
+
+.traveling-dot-1 {
+  animation: travelOrbit 12s linear infinite;
+}
+
+.traveling-dot-2 {
+  animation: travelOrbit 12s linear infinite;
+  animation-delay: 4s;
+}
+
+.traveling-dot-3 {
+  animation: travelOrbit 12s linear infinite;
+  animation-delay: 8s;
+}
+
+@keyframes travelOrbit {
+  0% {
+    transform: rotate(0deg) translateX(120px);
+  }
+  100% {
+    transform: rotate(360deg) translateX(120px);
+  }
+}
+
+@keyframes floatObject {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(10px, -10px);
+  }
+  50% {
+    transform: translate(0, 15px);
+  }
+  75% {
+    transform: translate(-10px, -5px);
+  }
+}
+
+@keyframes pulseOpacity {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 @keyframes orbitPulse {
