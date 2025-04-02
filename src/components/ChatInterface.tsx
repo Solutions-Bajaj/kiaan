@@ -83,7 +83,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
           </div>
         ))}
       </div>
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 relative z-20">
         <div className="flex items-center space-x-2">
           <Input
             type="text"
@@ -93,7 +93,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
             onKeyDown={e => { if (e.key === 'Enter') sendMessage(); }}
             className="flex-1"
           />
-          <Button onClick={sendMessage}><Send className="w-4 h-4" /></Button>
+          <Button onClick={sendMessage} className="z-20"><Send className="w-4 h-4" /></Button>
         </div>
       </div>
     </div>

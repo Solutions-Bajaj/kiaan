@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Mic, PhoneOff, MessageCircle, Users, MessageSquare } from 'lucide-react';
 import { useConversation } from '@11labs/react';
@@ -10,17 +9,14 @@ interface SolutionsBajajAIProps {
   onActiveStateChange?: (isActive: boolean) => void;
 }
 
-// Define type for the message source
 type Role = 'assistant' | 'user' | 'system' | 'ai';
 
-// Properly type the message interface to match what the useConversation hook provides
 interface ConversationMessage {
   message: string;
   source: Role;
   is_final?: boolean;
 }
 
-// Define the available interaction modes
 type InteractionMode = 'chat' | 'meeting' | 'text-chat';
 
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveStateChange }) => {
@@ -28,16 +24,13 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [mode, setMode] = useState<InteractionMode>('chat');
   
-  // Define agent IDs for different modes
   const AGENTS = {
-    chat: agentId, // Original agent ID passed as prop
-    meeting: '0OxkgMLQJmZuT23PE2Cv' // Meeting mode agent ID
+    chat: agentId,
+    meeting: '0OxkgMLQJmZuT23PE2Cv'
   };
 
-  // Define webhook URL for text chat mode
   const WEBHOOK_URL = "https://choco.solutionsbajaj.com/webhook/sberpkiaan";
 
-  // Initialize the ElevenLabs conversation hook
   const conversation = useConversation({
     onMessage: (message: ConversationMessage) => {
       console.log('Received message:', message);
@@ -67,20 +60,15 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
     try {
       setIsWaitingForMicPermission(true);
       
-      // Check if microphone permission is already granted
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
-      // Important: Release the stream to avoid permission issues
       stream.getTracks().forEach(track => track.stop());
       
-      // Start the conversation with the agent ID based on current mode
       await conversation.startSession({ 
         agentId: AGENTS[mode === 'text-chat' ? 'chat' : mode] 
       });
       
       setIsWaitingForMicPermission(false);
       
-      // Notify parent component that the agent is now active
       if (onActiveStateChange) {
         onActiveStateChange(true);
       }
@@ -95,7 +83,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
       await conversation.endSession();
       setMessages([]);
       
-      // Notify parent component that the agent is now inactive
       if (onActiveStateChange) {
         onActiveStateChange(false);
       }
@@ -104,17 +91,14 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
     }
   };
 
-  // Update active state based on conversation status and mode
   useEffect(() => {
     if (onActiveStateChange) {
-      // Agent is active if connected in voice mode or in text-chat mode with messages
       const isActive = (status === 'connected') || 
                        (mode === 'text-chat' && messages.length > 0);
       onActiveStateChange(isActive);
     }
   }, [status, mode, messages.length, onActiveStateChange]);
 
-  // Clean up when component unmounts
   useEffect(() => {
     return () => {
       if (status === 'connected') {
@@ -131,25 +115,21 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
 
   const handleModeChange = (newMode: InteractionMode) => {
     setMode(newMode);
-    // If we're already connected, restart the conversation with the new mode
     if (isConnected && newMode !== 'text-chat') {
       handleStop().then(() => {
         handleStart();
       });
     } else if (isConnected && mode !== 'text-chat' && newMode === 'text-chat') {
-      // If switching to text chat from voice, just stop the voice conversation
       handleStop();
     }
   };
 
-  // Track chat activity for the text chat mode
   const handleChatActivity = (hasActivity: boolean) => {
     if (mode === 'text-chat' && onActiveStateChange) {
       onActiveStateChange(hasActivity);
     }
   };
 
-  // Main content rendering
   const renderMainContent = () => {
     if (mode === 'text-chat') {
       return (
@@ -171,19 +151,17 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
           {mode === 'chat' ? 'Talk With Kiaan' : 'Meeting Mode'}
         </h3>
         
-        {/* Debug message showing current status */}
         <div className="text-sm text-slate-500">
           Status: {status} {isPending ? "(Connecting...)" : ""}
           {isConnected && isSpeaking ? " (Agent is speaking)" : ""}
         </div>
         
         <div className="flex items-center justify-center gap-4">
-          {/* Main microphone button */}
           {!isConnected ? (
             <button
               onClick={handleStart}
               disabled={isPending}
-              className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+              className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all z-20 ${
                 isPending
                   ? "bg-indigo-100 text-indigo-500 animate-pulse"
                   : "bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:shadow-lg hover:scale-105"
@@ -198,10 +176,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
             </button>
           ) : (
             <>
-              {/* Hang Up Button */}
               <button
                 onClick={handleStop}
-                className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600"
+                className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600 z-20"
                 aria-label="End conversation"
               >
                 <PhoneOff className="w-8 h-8" />
@@ -225,7 +202,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
     );
   };
 
-  // Animations for voice modes
   const renderVoiceAnimations = () => {
     if (mode === 'text-chat') return null;
     
@@ -233,7 +209,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
       <div 
         className="absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none"
       >
-        {/* Speaking animation - outward movement */}
         {isConnected && isSpeaking && (
           <div className="relative">
             {[...Array(5)].map((_, i) => (
@@ -252,7 +227,6 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
           </div>
         )}
         
-        {/* Listening animation - inward movement */}
         {isConnected && !isSpeaking && (
           <div className="relative">
             {[...Array(5)].map((_, i) => (
@@ -274,10 +248,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
     );
   };
 
-  // Render the mode buttons
   const renderModeButtons = () => {
     return (
-      <div className="flex justify-center space-x-4">
+      <div className="flex justify-center space-x-4 relative z-20">
         <Button 
           variant={mode === 'chat' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
@@ -310,16 +283,15 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId, onActiveSt
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-between relative p-4">
-      {/* Voice animations */}
       {renderVoiceAnimations()}
       
-      {/* Main content area */}
-      <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
+      <div className="flex-1 w-full flex items-center justify-center overflow-hidden relative z-10">
         {renderMainContent()}
       </div>
       
-      {/* Moved the buttons back to this component */}
-      {renderModeButtons()}
+      <div className="relative z-20">
+        {renderModeButtons()}
+      </div>
     </div>
   );
 };
