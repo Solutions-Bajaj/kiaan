@@ -118,7 +118,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
 
   return (
     <div className="flex flex-col h-full">
-      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-2 md:p-4 space-y-2">
+      <div 
+        ref={chatContainerRef} 
+        className={`flex-1 overflow-y-auto p-2 md:p-4 space-y-2 ${isMobile ? 'pb-4' : ''}`}
+      >
         {messages.map((msg, index) => (
           <div key={index} className={`text-sm ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
             <span className={`px-3 py-1 rounded-lg inline-block ${msg.role === 'user' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
@@ -148,8 +151,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ webhookUrl, onActivityCha
         </div>
       )}
 
-      {/* Input area */}
-      <div className="p-2 md:p-4 border-t border-gray-200">
+      {/* Input area - adjusted for mobile */}
+      <div className={`p-2 md:p-4 border-t border-gray-200 ${isMobile ? 'mt-auto bg-white' : ''}`}>
         <div className="flex items-center space-x-2">
           <Input
             type="text"

@@ -266,4 +266,41 @@
     right: 1rem;
     bottom: 1rem;
   }
+  
+  /* New styles for mobile chat layout */
+  .kiaan-panel-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Optimize the spacing to give more room for chat content */
+  .kiaan-panel-content > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  /* Chat interface input area adjustments */
+  .kiaan-panel-content input,
+  .kiaan-panel-content button {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Position mode buttons at the bottom */
+  .kiaan-action-buttons {
+    margin-top: auto;
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  
+  /* Fixed position chat input for mobile */
+  .kiaan-chat-input {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding: 0.5rem;
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+    margin-top: auto;
+  }
 }
