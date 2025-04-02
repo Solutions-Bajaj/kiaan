@@ -50,11 +50,12 @@
 
     --sidebar-ring: 217.2 91.2% 59.8%;
     
-    /* Kiaan Animation colors - updating with bluish theme */
+    /* Kiaan Animation colors - updating with bluish-purple theme to match orb */
     --agent-teal: #60a5fa;
     --agent-dark: #1A2C38;
     --agent-light: #E5F9FF;
     --agent-glow: #4cc2ff;
+    --agent-purple: #8b5cf6;
   }
 
   .dark {
@@ -646,7 +647,7 @@
   }
 }
 
-/* SIRI-LIKE WAVE ANIMATION - Active State */
+/* SIRI-LIKE WAVE ANIMATION - Active State - Updated with blue-purple gradient colors */
 .agent-active {
   position: relative;
   width: 200px;
@@ -670,7 +671,7 @@
   position: absolute;
   inset: -20px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(76, 194, 255, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(76, 194, 255, 0.2) 0%, rgba(139, 92, 246, 0.1) 70%);
   filter: blur(10px);
   opacity: 0.7;
   animation: glowPulse 4s infinite alternate;
@@ -678,11 +679,11 @@
 
 .siri-bar {
   width: 8px;
-  background: linear-gradient(to top, #1EAEDB 0%, #33C3F0 100%);
+  background: linear-gradient(to top, #3b82f6 0%, #8b5cf6 100%);
   border-radius: 4px;
   transform-origin: bottom;
   animation: siriWave 1.5s ease-in-out infinite;
-  box-shadow: 0 0 8px rgba(76, 194, 255, 0.6);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
 }
 
 .siri-bar-1 { height: 20px; animation-delay: 0.1s; }
