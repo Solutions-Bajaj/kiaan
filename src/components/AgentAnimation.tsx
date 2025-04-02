@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface AgentAnimationProps {
   isActive: boolean;
@@ -8,6 +9,7 @@ interface AgentAnimationProps {
 
 const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) => {
   const [animationState, setAnimationState] = useState<'idle' | 'active'>('idle');
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (isActive) {
@@ -16,6 +18,18 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
       setAnimationState('idle');
     }
   }, [isActive]);
+
+  // Don't render animations on mobile to improve performance
+  if (isMobile) {
+    return (
+      <div className="w-full h-full flex flex-col">
+        <div className="flex-1 relative overflow-hidden">
+          {/* Simplified animation for mobile - just basic colored background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col">

@@ -1,27 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
-import { Mic, PhoneOff, MessageCircle, Users, MessageSquare } from 'lucide-react';
+import { Mic, PhoneOff, MessageCircle, Users, MessageSquare, PaperclipIcon } from 'lucide-react';
 import { useConversation } from '@11labs/react';
 import { Button } from './ui/button';
 import ChatInterface from './ChatInterface';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface SolutionsBajajAIProps {
   agentId: string;
   onActiveStateChange?: (isActive: boolean) => void;
-  callActive?: boolean; // New prop to receive information about call state
+  callActive?: boolean;
 }
 
-// Define type for the message source
 type Role = 'assistant' | 'user' | 'system' | 'ai';
 
-// Properly type the message interface to match what the useConversation hook provides
 interface ConversationMessage {
   message: string;
   source: Role;
   is_final?: boolean;
 }
 
-// Define the available interaction modes
 type InteractionMode = 'chat' | 'meeting' | 'text-chat';
 
 const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ 
@@ -32,11 +30,12 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
   const [isWaitingForMicPermission, setIsWaitingForMicPermission] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [mode, setMode] = useState<InteractionMode>('chat');
+  const isMobile = useIsMobile();
   
   // Define agent IDs for different modes
   const AGENTS = {
-    chat: agentId, // Original agent ID passed as prop
-    meeting: '0OxkgMLQJmZuT23PE2Cv' // Meeting mode agent ID
+    chat: agentId,
+    meeting: '0OxkgMLQJmZuT23PE2Cv'
   };
 
   // Define webhook URL for text chat mode
@@ -179,7 +178,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
     }
     
     return (
-      <div className="text-center space-y-6 max-w-md z-10">
+      <div className="text-center space-y-4 md:space-y-6 max-w-md z-10 px-2">
         <h3 className="text-xl font-medium text-slate-700">
           {mode === 'chat' ? 'Talk With Kiaan' : 'Meeting Mode'}
         </h3>
@@ -196,7 +195,7 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
             <button
               onClick={handleStart}
               disabled={isPending}
-              className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+              className={`relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all ${
                 isPending
                   ? "bg-indigo-100 text-indigo-500 animate-pulse"
                   : "bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:shadow-lg hover:scale-105"
@@ -204,9 +203,9 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
               aria-label="Start conversation"
             >
               {isPending ? (
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-500"></div>
+                <div className="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-b-2 border-indigo-500"></div>
               ) : (
-                <Mic className="w-8 h-8" />
+                <Mic className="w-6 h-6 md:w-8 md:h-8" />
               )}
             </button>
           ) : (
@@ -214,10 +213,10 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
               {/* Hang Up Button */}
               <button
                 onClick={handleStop}
-                className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600"
+                className="relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all bg-red-500 text-white hover:bg-red-600"
                 aria-label="End conversation"
               >
-                <PhoneOff className="w-8 h-8" />
+                <PhoneOff className="w-6 h-6 md:w-8 md:h-8" />
               </button>
             </>
           )}
@@ -237,17 +236,18 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
         
         {isVoiceModeActive && (
           <div className="text-xs text-amber-600 mt-2 p-2 bg-amber-50 rounded-md">
-            Please end your current call before switching modes or closing the panel
+            Please end your current call before switching modes
           </div>
         )}
       </div>
     );
   };
 
-  // Animations for voice modes
+  // Animations for voice modes - simplified for mobile
   const renderVoiceAnimations = () => {
-    if (mode === 'text-chat') return null;
+    if (mode === 'text-chat' || isMobile) return null;
     
+    // Only render full animations on desktop
     return (
       <div 
         className="absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none"
@@ -293,45 +293,48 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({
     );
   };
 
-  // Render the mode buttons
+  // Render the mode buttons - optimized for mobile
   const renderModeButtons = () => {
     return (
-      <div className="flex justify-center space-x-4">
+      <div className={`flex justify-center ${isMobile ? 'flex-wrap gap-2' : 'space-x-4'}`}>
         <Button 
           variant={mode === 'chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-1 text-xs md:text-sm md:gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('chat')}
           disabled={isVoiceModeActive} // Disable when in voice call
+          size={isMobile ? "sm" : "default"}
         >
-          <MessageCircle className="w-4 h-4" />
-          Talk with Kiaan
+          <MessageCircle className="w-3 h-3 md:w-4 md:h-4" />
+          Talk
         </Button>
         
         <Button 
           variant={mode === 'meeting' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-1 text-xs md:text-sm md:gap-2 ${mode === 'meeting' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('meeting')}
           disabled={isVoiceModeActive} // Disable when in voice call
+          size={isMobile ? "sm" : "default"}
         >
-          <Users className="w-4 h-4" />
-          Meeting Mode
+          <Users className="w-3 h-3 md:w-4 md:h-4" />
+          Meeting
         </Button>
         
         <Button 
           variant={mode === 'text-chat' ? 'default' : 'outline'} 
-          className={`flex items-center gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
+          className={`flex items-center gap-1 text-xs md:text-sm md:gap-2 ${mode === 'text-chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}
           onClick={() => handleModeChange('text-chat')}
           disabled={isVoiceModeActive} // Disable when in voice call
+          size={isMobile ? "sm" : "default"}
         >
-          <MessageSquare className="w-4 h-4" />
-          Chat with Kiaan
+          <MessageSquare className="w-3 h-3 md:w-4 md:h-4" />
+          Chat
         </Button>
       </div>
     );
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-between relative p-4">
+    <div className="w-full h-full flex flex-col items-center justify-between relative p-2 md:p-4">
       {/* Voice animations */}
       {renderVoiceAnimations()}
       

@@ -1,19 +1,29 @@
+
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+// Updated to a smaller breakpoint for better mobile optimization
+const MOBILE_BREAKPOINT = 640
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
+    // Function to update based on screen size
+    const updateSize = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
+
+    // Initial check
+    updateSize()
+
+    // Setup event listener for window resize
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    mql.addEventListener("change", updateSize)
+    
+    // Clean up event listener
+    return () => mql.removeEventListener("change", updateSize)
   }, [])
 
-  return !!isMobile
+  // If isMobile is undefined (during SSR), return false as a fallback
+  return isMobile === undefined ? false : isMobile
 }
