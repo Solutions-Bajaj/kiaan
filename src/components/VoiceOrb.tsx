@@ -12,6 +12,9 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const orbRef = useRef<HTMLButtonElement>(null);
+  const dragThreshold = 5; // pixels of movement required to consider it a drag
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const hasMoved = useRef(false);
 
   // Don't run any animations or effects if the panel is open
   useEffect(() => {
@@ -34,12 +37,24 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isOpen) return;
     
-    setIsDragging(true);
+    // Record starting position to measure movement
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    hasMoved.current = false;
     
     const offsetX = e.clientX - position.x;
     const offsetY = e.clientY - position.y;
     
     const handleMouseMove = (e: MouseEvent) => {
+      // Calculate distance moved
+      const dx = Math.abs(e.clientX - dragStartPos.current.x);
+      const dy = Math.abs(e.clientY - dragStartPos.current.y);
+      
+      // If moved more than threshold, consider it a drag
+      if (dx > dragThreshold || dy > dragThreshold) {
+        setIsDragging(true);
+        hasMoved.current = true;
+      }
+      
       const newX = e.clientX - offsetX;
       const newY = e.clientY - offsetY;
       
@@ -66,15 +81,27 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isOpen) return;
     
-    setIsDragging(true);
-    
+    // Record starting position to measure movement
     const touch = e.touches[0];
+    dragStartPos.current = { x: touch.clientX, y: touch.clientY };
+    hasMoved.current = false;
+    
     const offsetX = touch.clientX - position.x;
     const offsetY = touch.clientY - position.y;
     
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         const touch = e.touches[0];
+        
+        // Calculate distance moved
+        const dx = Math.abs(touch.clientX - dragStartPos.current.x);
+        const dy = Math.abs(touch.clientY - dragStartPos.current.y);
+        
+        // If moved more than threshold, consider it a drag
+        if (dx > dragThreshold || dy > dragThreshold) {
+          setIsDragging(true);
+          hasMoved.current = true;
+        }
         
         const newX = touch.clientX - offsetX;
         const newY = touch.clientY - offsetY;
@@ -101,7 +128,8 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
   };
   
   const handleClick = (e: React.MouseEvent) => {
-    if (!isDragging) {
+    // Only trigger the click handler if the orb wasn't being dragged
+    if (!hasMoved.current) {
       onClick();
     }
   };
