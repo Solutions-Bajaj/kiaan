@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Mic, PhoneOff, MessageCircle, Users, MessageSquare } from 'lucide-react';
 import { useConversation } from '@11labs/react';
@@ -249,8 +250,8 @@ const SolutionsBajajAI: React.FC<SolutionsBajajAIProps> = ({ agentId }) => {
         {renderMainContent()}
       </div>
       
-      {/* Mode selection buttons */}
-      <div className="flex space-x-4 justify-center mt-6">
+      {/* Mode buttons now in a fixed position at the bottom of the container */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-center space-x-4">
         <Button 
           variant={mode === 'chat' ? 'default' : 'outline'} 
           className={`flex items-center gap-2 ${mode === 'chat' ? 'bg-gradient-to-r from-blue-400 to-purple-400' : ''}`}

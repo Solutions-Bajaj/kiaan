@@ -60,16 +60,6 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
       >
-        {/* Futuristic background elements */}
-        <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-          <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 blur-3xl" />
-          <div className="absolute top-1/3 -left-12 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-blue-300 blur-2xl" />
-          <div className="absolute -bottom-12 left-1/3 w-32 h-32 rounded-full bg-gradient-to-r from-cyan-300 to-blue-200 blur-2xl" />
-          
-          {/* Grid lines */}
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzIwNzZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIgLz48L3N2Zz4=')]" />
-        </div>
-
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -89,8 +79,8 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
 
         {/* Main Content Area - Split into two columns */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-          {/* Left Column - Agent Terminal */}
-          <div className="w-full md:w-1/2 border-r border-slate-200 bg-slate-900/90 text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
+          {/* Left Column - Agent Terminal with transparent background */}
+          <div className="w-full md:w-1/2 border-r border-slate-200 bg-transparent text-green-400 p-2 font-mono text-sm overflow-hidden flex flex-col">
             <div className="flex items-center justify-between mb-2 text-xs text-slate-400 border-b border-slate-700 pb-2">
               <div className="flex items-center gap-2">
                 <Terminal size={14} />
@@ -103,7 +93,7 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
               {terminalMessages.map((msg, index) => (
                 <div key={index} className="mb-1 opacity-80">
                   <span className="text-blue-400 mr-2">&gt;</span>
@@ -131,18 +121,9 @@ const VoicePanel: React.FC<VoicePanelProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-3 border-t border-slate-100 flex flex-col items-center">
-          {/* Mode buttons are now in the footer area */}
-          <div className="flex justify-center space-x-4 mb-2">
-            {/* These buttons are from SolutionsBajajAI component, but we're moving the visual container here */}
-          </div>
-          
-          <div className="text-xs text-slate-400">
-            <a href="https://solutionsbajaj.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
-              Powered by Solutions Bajaj
-            </a>
-          </div>
+        {/* Footer with mode buttons centered */}
+        <div className="p-4 border-t border-slate-100 flex justify-center">
+          {/* The mode buttons are now handled directly by SolutionsBajajAI and positioned at the bottom of the panel */}
         </div>
       </div>
     </>
