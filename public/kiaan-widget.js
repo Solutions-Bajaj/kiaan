@@ -1,4 +1,3 @@
-
 // Standalone script that can be included in any website to add the Kiaan widget
 (function() {
   // Create container for the widget
@@ -14,11 +13,11 @@
   orb.innerHTML = `
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M8 4V20M8 13L16 20M8 11L16 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" stroke="white" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
-      <circle cx="8" cy="8" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="8" cy="16" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="16" cy="8" r="1" fill="white" fill-opacity="0.8" />
-      <circle cx="16" cy="16" r="1" fill="white" fill-opacity="0.8" />
+      <path d="M4 8h4 M4 16h4 M16 8h4 M16 16h4 M18 4v4 M18 16v4" stroke="#60a5fa" stroke-width="1" stroke-linecap="round" stroke-opacity="0.8"/>
+      <circle cx="8" cy="8" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="8" cy="16" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="16" cy="8" r="1" fill="#60a5fa" fill-opacity="0.8" />
+      <circle cx="16" cy="16" r="1" fill="#60a5fa" fill-opacity="0.8" />
     </svg>
     <div class="kiaan-pulse-ring"></div>
   `;
@@ -108,8 +107,8 @@
     style.textContent = `
       .kiaan-orb {
         position: fixed;
-        bottom: 2rem;
-        right: 2rem;
+        bottom: auto;
+        right: auto;
         z-index: 9999;
         display: flex;
         align-items: center;
@@ -121,9 +120,14 @@
         color: white;
         border: 2px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        cursor: pointer;
+        cursor: grab;
         transition: all 0.3s ease;
         outline: none;
+        touch-action: none;
+      }
+      
+      .kiaan-orb:active {
+        cursor: grabbing;
       }
       
       .kiaan-orb:hover {
@@ -135,6 +139,10 @@
         transform: scale(0);
         opacity: 0;
         pointer-events: none;
+      }
+      
+      .kiaan-orb.dragging {
+        transition: none;
       }
       
       .kiaan-pulse-ring {
@@ -336,12 +344,133 @@
     // Toggle panel visibility
     let isOpen = false;
     let isFullscreen = false;
+    let isDragging = false;
     
-    orb.addEventListener('click', () => {
-      isOpen = true;
-      panel.classList.add('open');
-      orb.classList.add('hidden');
-      createAIWidget();
+    // Set initial position (bottom right)
+    const setInitialPosition = () => {
+      const orbWidth = orb.offsetWidth || 48;
+      const orbHeight = orb.offsetHeight || 48;
+      
+      // Default position - bottom right with some margin
+      const defaultX = window.innerWidth - orbWidth - 32;
+      const defaultY = window.innerHeight - orbHeight - 32;
+      
+      orb.style.left = `${defaultX}px`;
+      orb.style.top = `${defaultY}px`;
+    };
+    
+    // Make the orb draggable
+    const makeOrbDraggable = () => {
+      let offsetX, offsetY;
+      
+      // Mouse events
+      orb.addEventListener('mousedown', function(e) {
+        if (isOpen) return;
+        
+        isDragging = true;
+        orb.classList.add('dragging');
+        
+        // Get the current position of the orb
+        const orbRect = orb.getBoundingClientRect();
+        
+        // Calculate the offset of the mouse click relative to the orb position
+        offsetX = e.clientX - orbRect.left;
+        offsetY = e.clientY - orbRect.top;
+        
+        document.addEventListener('mousemove', mouseMove);
+        document.addEventListener('mouseup', mouseUp);
+        
+        // Prevent default behavior to avoid text selection during drag
+        e.preventDefault();
+      });
+      
+      // Touch events for mobile
+      orb.addEventListener('touchstart', function(e) {
+        if (isOpen) return;
+        
+        isDragging = true;
+        orb.classList.add('dragging');
+        
+        // Get the current position of the orb
+        const orbRect = orb.getBoundingClientRect();
+        const touch = e.touches[0];
+        
+        // Calculate the offset of the touch relative to the orb position
+        offsetX = touch.clientX - orbRect.left;
+        offsetY = touch.clientY - orbRect.top;
+        
+        document.addEventListener('touchmove', touchMove, { passive: false });
+        document.addEventListener('touchend', touchEnd);
+        
+        // Prevent default behavior to avoid scrolling during drag on mobile
+        e.preventDefault();
+      }, { passive: false });
+      
+      function mouseMove(e) {
+        const orbWidth = orb.offsetWidth;
+        const orbHeight = orb.offsetHeight;
+        
+        // Calculate new position
+        let newLeft = e.clientX - offsetX;
+        let newTop = e.clientY - offsetY;
+        
+        // Keep the orb within the viewport bounds
+        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - orbWidth));
+        newTop = Math.max(0, Math.min(newTop, window.innerHeight - orbHeight));
+        
+        // Update orb position
+        orb.style.left = `${newLeft}px`;
+        orb.style.top = `${newTop}px`;
+      }
+      
+      function touchMove(e) {
+        const touch = e.touches[0];
+        const orbWidth = orb.offsetWidth;
+        const orbHeight = orb.offsetHeight;
+        
+        // Calculate new position
+        let newLeft = touch.clientX - offsetX;
+        let newTop = touch.clientY - offsetY;
+        
+        // Keep the orb within the viewport bounds
+        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - orbWidth));
+        newTop = Math.max(0, Math.min(newTop, window.innerHeight - orbHeight));
+        
+        // Update orb position
+        orb.style.left = `${newLeft}px`;
+        orb.style.top = `${newTop}px`;
+        
+        // Prevent default to avoid scrolling while dragging
+        e.preventDefault();
+      }
+      
+      function mouseUp() {
+        isDragging = false;
+        orb.classList.remove('dragging');
+        document.removeEventListener('mousemove', mouseMove);
+        document.removeEventListener('mouseup', mouseUp);
+      }
+      
+      function touchEnd() {
+        isDragging = false;
+        orb.classList.remove('dragging');
+        document.removeEventListener('touchmove', touchMove);
+        document.removeEventListener('touchend', touchEnd);
+      }
+    };
+    
+    // Initialize position and draggability
+    setInitialPosition();
+    makeOrbDraggable();
+    
+    // Handle orb click to open panel
+    orb.addEventListener('click', function(e) {
+      if (!isDragging) {
+        isOpen = true;
+        panel.classList.add('open');
+        orb.classList.add('hidden');
+        createAIWidget();
+      }
     });
     
     const closeBtn = panel.querySelector('.kiaan-close-btn');
@@ -379,6 +508,33 @@
         isOpen = false;
         panel.classList.remove('open');
         orb.classList.remove('hidden');
+      }
+    });
+    
+    // Update panel position when window is resized
+    window.addEventListener('resize', function() {
+      // If the orb is outside the viewport after resize, reposition it
+      const orbRect = orb.getBoundingClientRect();
+      const orbWidth = orb.offsetWidth || 48;
+      const orbHeight = orb.offsetHeight || 48;
+      
+      let needsRepositioning = false;
+      let newLeft = parseInt(orb.style.left);
+      let newTop = parseInt(orb.style.top);
+      
+      if (orbRect.right > window.innerWidth) {
+        newLeft = window.innerWidth - orbWidth - 16;
+        needsRepositioning = true;
+      }
+      
+      if (orbRect.bottom > window.innerHeight) {
+        newTop = window.innerHeight - orbHeight - 16;
+        needsRepositioning = true;
+      }
+      
+      if (needsRepositioning) {
+        orb.style.left = `${newLeft}px`;
+        orb.style.top = `${newTop}px`;
       }
     });
   };
