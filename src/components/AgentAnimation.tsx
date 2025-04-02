@@ -69,35 +69,26 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           {animationState === 'transitioning' && (
             <div className="agent-transition">
               <div className="expanding-circle"></div>
-              <div className="face-container">
-                <div className="face-outline"></div>
-                <div className="face-detail face-detail-1"></div>
-                <div className="face-detail face-detail-2"></div>
-                <div className="forming-eye forming-eye-left"></div>
-                <div className="forming-eye forming-eye-right"></div>
+              <div className="circuit-container">
                 <div className="circuit-line circuit-line-1"></div>
                 <div className="circuit-line circuit-line-2"></div>
                 <div className="circuit-line circuit-line-3"></div>
                 <div className="circuit-line circuit-line-4"></div>
+                <div className="circuit-dot circuit-dot-1"></div>
+                <div className="circuit-dot circuit-dot-2"></div>
+                <div className="circuit-dot circuit-dot-3"></div>
               </div>
             </div>
           )}
           
           {animationState === 'active' && (
             <div className="agent-active">
-              <div className="human-face">
-                <div className="human-face-outline"></div>
-                <div className="human-features">
-                  <div className="human-eyes">
-                    <div className="human-eye human-eye-left"></div>
-                    <div className="human-eye human-eye-right"></div>
-                  </div>
-                  <div className="human-nose"></div>
-                  <div className="human-mouth"></div>
-                </div>
-                <div className="human-hair"></div>
-                <div className="human-glow"></div>
-                <div className="human-aura"></div>
+              <div className="siri-container">
+                <div className="siri-glow"></div>
+                {/* Siri-like wave bars */}
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} className={`siri-bar siri-bar-${i + 1}`}></div>
+                ))}
               </div>
             </div>
           )}
