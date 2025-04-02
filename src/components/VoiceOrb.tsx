@@ -32,7 +32,7 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isOpen, onClick }) => {
     >
       <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       
-      {/* Robotic K icon with diffusion effect */}
+      {/* K logo with circuit elements */}
       <div className="relative w-6 h-6 flex items-center justify-center">
         {/* Main K shape */}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute">
