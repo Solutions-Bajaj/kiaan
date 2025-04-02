@@ -85,22 +85,7 @@ const AgentAnimation: React.FC<AgentAnimationProps> = ({ isActive, messages }) =
           )}
         </div>
         
-        {/* Terminal messages overlay - only shown when active */}
-        <div className={`absolute bottom-0 left-0 right-0 p-2 transition-opacity duration-500 ${animationState === 'active' ? 'opacity-80' : 'opacity-0'}`}>
-          <div className="terminal-messages max-h-24 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-            {messages.map((msg, index) => (
-              <div key={index} className="mb-1 text-xs">
-                <span className="text-blue-400 mr-2">&gt;</span>
-                <span className="text-green-400">{msg}</span>
-              </div>
-            ))}
-            
-            <div className="flex items-center mt-1 text-slate-400 text-xs">
-              <span className="mr-1">&gt;</span>
-              <span className="animate-pulse">_</span>
-            </div>
-          </div>
-        </div>
+        {/* Terminal messages overlay has been removed */}
       </div>
     </div>
   );
