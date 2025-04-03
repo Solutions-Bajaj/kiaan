@@ -5,7 +5,7 @@ A lightweight, embeddable voice and chat assistant widget that can be added to a
 
 ## Installation
 
-Installing the Kiaan assistant into your website is easy:
+Installing the Kiaan assistant into your PHP website is easy:
 
 ### 1. Copy the Kiaan folder
 
