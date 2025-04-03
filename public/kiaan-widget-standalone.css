@@ -1,0 +1,190 @@
+
+/* Kiaan Widget Standalone CSS */
+.kiaan-orb {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(to right, #60a5fa, #3b82f6);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.kiaan-orb:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.kiaan-orb.hidden {
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kiaan-pulse-ring {
+  position: absolute;
+  inset: -0.5rem;
+  border-radius: 50%;
+  background-color: rgba(96, 165, 250, 0.2);
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.kiaan-orb:not(.hidden) .kiaan-pulse-ring {
+  animation: kiaan-pulse 3s infinite;
+}
+
+@keyframes kiaan-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+.kiaan-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.kiaan-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.kiaan-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  max-width: 800px;
+  height: 80vh;
+  max-height: 600px;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kiaan-panel.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.kiaan-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 1);
+}
+
+.kiaan-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kiaan-status-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: linear-gradient(to right, #60a5fa, #34d399);
+  animation: kiaan-pulse 3s infinite;
+}
+
+.kiaan-panel-title h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.kiaan-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 50%;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.kiaan-close-btn:hover {
+  color: #475569;
+  background-color: #f1f5f9;
+}
+
+.kiaan-panel-content {
+  flex: 1;
+  padding: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.kiaan-panel-content elevenlabs-convai {
+  width: 100%;
+  height: 100%;
+}
+
+.kiaan-panel-footer {
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(226, 232, 240, 1);
+}
+
+.kiaan-panel-footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.kiaan-panel-footer a:hover {
+  color: #3b82f6;
+}
+
+@media (max-width: 640px) {
+  .kiaan-panel {
+    width: 95vw;
+    height: 95vh;
+    max-height: 95vh;
+    max-width: 95vw;
+  }
+}
