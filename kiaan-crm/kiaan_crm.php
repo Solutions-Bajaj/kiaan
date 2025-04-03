@@ -32,12 +32,23 @@ function kiaan_crm_load_css()
 }
 
 /**
- * Load the module's JavaScript
+ * Load the module's JavaScript with configuration
  * @return void
  */
 function kiaan_crm_load_js()
 {
-    echo '<script src="' . module_dir_url(KIAAN_CRM_MODULE_NAME, 'assets/js/config.js') . '"></script>';
+    // Add configuration variables to be used by the widget
+    $config = [
+        'chatWebhookUrl' => get_option('kiaan_chat_webhook_url'),
+        'agentIdChat' => get_option('kiaan_agent_id_chat'),
+        'agentIdMeeting' => get_option('kiaan_agent_id_meeting'),
+        'primaryColor' => get_option('kiaan_primary_color') ?: '#60a5fa',
+        'secondaryColor' => get_option('kiaan_secondary_color') ?: '#34d399',
+        'footerText' => get_option('kiaan_footer_text') ?: 'Powered by Solutions Bajaj',
+        'footerLink' => get_option('kiaan_footer_link') ?: 'https://solutionsbajaj.com',
+    ];
+    
+    echo '<script>window.kiaanConfig = ' . json_encode($config) . ';</script>';
     echo '<script src="' . module_dir_url(KIAAN_CRM_MODULE_NAME, 'assets/js/kiaan-widget.js') . '"></script>';
 }
 
@@ -68,6 +79,7 @@ function kiaan_crm_add_admin_menu_item()
 {
     $CI = &get_instance();
 
+    // Check for permissions
     if (has_permission('kiaan_crm', '', 'view')) {
         $CI->app_menu->add_sidebar_menu_item('kiaan-crm', [
             'name'     => _l('kiaan_voice_assistant'),
@@ -76,4 +88,13 @@ function kiaan_crm_add_admin_menu_item()
             'icon'     => 'fa fa-microphone',
         ]);
     }
+}
+
+// Ensure the Kiaan module is shown in modules list
+hooks()->add_filter('module_kiaan_crm_action_links', 'module_kiaan_crm_action_links');
+
+function module_kiaan_crm_action_links($actions)
+{
+    $actions[] = '<a href="' . admin_url('kiaan_crm/settings') . '">' . _l('settings') . '</a>';
+    return $actions;
 }
